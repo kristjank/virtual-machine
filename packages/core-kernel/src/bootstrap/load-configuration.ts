@@ -6,7 +6,7 @@ export class LoadConfiguration {
     /**
      * Bootstrap the given application.
      */
-    public bootstrap(app: Kernel.IApplication): void {
+    public async bootstrap(app: Kernel.IApplication): Promise<void> {
         try {
             const config = safeLoad(readFileSync(app.configPath("config.yml"), "utf8"));
 

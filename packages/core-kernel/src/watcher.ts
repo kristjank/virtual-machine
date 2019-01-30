@@ -21,8 +21,8 @@ export class Watcher {
 
         const watcher = await nsfw(this.app.configPath(), (events: FileEvent[]) => {
             for (const event of events) {
-                if (configFiles.includes(event.file)) {
-                    this.app.boot();
+                if (configFiles.includes(event.file) && event.action === nsfw.actions.MODIFIED) {
+                    this.app.reboot();
                 }
             }
         });

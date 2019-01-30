@@ -5,7 +5,7 @@ export class LoadEnvironmentVariables {
     /**
      * Bootstrap the given application.
      */
-    public bootstrap(app: Kernel.IApplication): void {
+    public async bootstrap(app: Kernel.IApplication): Promise<void> {
         try {
             const config = parseFileSync(app.environmentFile());
 

@@ -6,7 +6,7 @@ export class RegisterProviders {
     /**
      * Register all of the configured providers.
      */
-    public bootstrap(app: Kernel.IApplication): void {
+    public async bootstrap(app: Kernel.IApplication): Promise<void> {
         const providers = app.config("providers");
 
         for (const [pkg, opts] of Object.entries(providers)) {
@@ -15,7 +15,9 @@ export class RegisterProviders {
             const serviceProvider = new ServiceProvider(app, opts);
 
             if (this.satisfiesDependencies(app, serviceProvider)) {
-                serviceProvider.register();
+                await serviceProvider.register();
+
+                app.providers.add(serviceProvider);
             }
         }
     }

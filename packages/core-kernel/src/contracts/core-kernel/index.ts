@@ -1,13 +1,6 @@
-import { AwilixContainer } from "awilix";
-import { boolean } from "joi";
-import { ILogger } from "../core-logger";
+import { AbstractServiceProvider } from "../../support";
 
 export interface IContainer {
-    /**
-     * The current available container.
-     */
-    readonly container: AwilixContainer;
-
     /**
      * Resolve the given name from the container.
      */
@@ -35,6 +28,8 @@ export interface IContainer {
 }
 
 export interface IApplication extends IContainer {
+    readonly providers: Set<AbstractServiceProvider>;
+
     /**
      * Boot the application's service providers.
      */
@@ -44,6 +39,11 @@ export interface IApplication extends IContainer {
      * Boot the application.
      */
     boot(): void;
+
+    /**
+     * Reboot the application.
+     */
+    reboot(): void;
 
     /**
      * Get or set the specified configuration value.

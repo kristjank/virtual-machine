@@ -5,8 +5,14 @@ import * as Bootstrappers from "./bootstrap";
 import { Container } from "./container";
 import { Blockchain, EventEmitter, Logger, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
+import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container {
+    /**
+     * Holds the providers that have been registered.
+     */
+    public readonly providers: Set<AbstractServiceProvider> = new Set<AbstractServiceProvider>();
+
     /**
      * Indicates if the application has been bootstrapped.
      */
@@ -33,6 +39,15 @@ export class Application extends Container {
      * Boot the application.
      */
     public boot(): void {
+        this.registerServiceProviders();
+    }
+
+    /**
+     * Reboot the application.
+     */
+    public reboot(): void {
+        this.terminate();
+
         this.registerServiceProviders();
     }
 
@@ -249,7 +264,7 @@ export class Application extends Container {
     public enableMaintenance(): void {
         writeFileSync(this.tempPath("maintenance"), JSON.stringify({ time: +new Date() }));
 
-        // this.logger.warning("Application is now in maintenance mode.");
+        this.logger.warn("Application is now in maintenance mode.");
     }
 
     /**
@@ -258,7 +273,7 @@ export class Application extends Container {
     public disableMaintenance(): void {
         removeSync(this.tempPath("maintenance"));
 
-        // this.logger.warning("Application is now live.");
+        this.logger.warn("Application is now live.");
     }
 
     /**
@@ -274,7 +289,7 @@ export class Application extends Container {
     public terminate(): void {
         this.bootstrapped = false;
 
-        // @TODO
+        this.disposeServiceProviders();
     }
 
     /**
@@ -320,8 +335,19 @@ export class Application extends Container {
     /**
      * Register the application service providers.
      */
-    private registerServiceProviders(): void {
-        Object.values(Bootstrappers).forEach((Bootstrapper: any) => new Bootstrapper().bootstrap(this));
+    private async registerServiceProviders(): Promise<void> {
+        for (const Bootstrapper of Object.values(Bootstrappers)) {
+            await new Bootstrapper().bootstrap(this);
+        }
+    }
+
+    /**
+     * Dispose the application service providers.
+     */
+    private async disposeServiceProviders(): Promise<void> {
+        for (const provider of this.providers.values()) {
+            await provider.dispose();
+        }
     }
 
     /**
