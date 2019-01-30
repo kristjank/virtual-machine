@@ -41,6 +41,11 @@ export interface IApplication extends IContainer {
     bootstrap(config: Record<string, any>): void;
 
     /**
+     * Boot the application.
+     */
+    boot(): void;
+
+    /**
      * Get or set the specified configuration value.
      */
     config<T = any>(key: string, value?: T): T;
@@ -68,7 +73,7 @@ export interface IApplication extends IContainer {
     /**
      * Get the path to the data directory.
      */
-    dataPath(path: string): string;
+    dataPath(path?: string): string;
 
     /**
      * Set the data directory.
@@ -78,7 +83,7 @@ export interface IApplication extends IContainer {
     /**
      * Get the path to the config directory.
      */
-    configPath(path: string): string;
+    configPath(path?: string): string;
 
     /**
      * Set the config directory.
@@ -88,7 +93,7 @@ export interface IApplication extends IContainer {
     /**
      * Get the path to the cache directory.
      */
-    cachePath(path: string): string;
+    cachePath(path?: string): string;
 
     /**
      * Set the cache directory.
@@ -98,7 +103,7 @@ export interface IApplication extends IContainer {
     /**
      * Get the path to the log directory.
      */
-    logPath(path: string): string;
+    logPath(path?: string): string;
 
     /**
      * Set the log directory.
@@ -108,7 +113,7 @@ export interface IApplication extends IContainer {
     /**
      * Get the path to the temp directory.
      */
-    tempPath(path: string): string;
+    tempPath(path?: string): string;
 
     /**
      * Set the temp directory.
