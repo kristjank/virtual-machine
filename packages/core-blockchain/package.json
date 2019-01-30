@@ -30,14 +30,12 @@
         "updates": "../../node_modules/npm-check-updates/bin/npm-check-updates -a"
     },
     "dependencies": {
-        "@arkecosystem/core-interfaces": "^2.1.0",
-        "@arkecosystem/core-container": "^2.1.0",
+        "@arkecosystem/core-kernel": "^2.1.0",
         "@arkecosystem/core-database-postgres": "^2.1.0",
         "@arkecosystem/core-utils": "^2.1.0",
         "@arkecosystem/crypto": "^2.1.0",
         "@types/lodash.get": "^4.4.4",
         "async": "^2.6.1",
-        "awilix": "^4.0.1",
         "delay": "^4.1.0",
         "immutable": "^4.0.0-rc.12",
         "lodash.get": "^4.4.2",
@@ -62,5 +60,8 @@
     },
     "jest": {
         "preset": "../../jest-preset.json"
+    },
+    "core": {
+        "alias": "blockchain"
     }
 }

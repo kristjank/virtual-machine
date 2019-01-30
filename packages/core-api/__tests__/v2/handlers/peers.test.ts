@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { Peer } from "@arkecosystem/core-p2p/src/peer";
 import "@arkecosystem/core-test-utils";
 import { setUp, tearDown } from "../../__support__/setup";
@@ -13,13 +13,13 @@ beforeAll(async () => {
     const peerMock = new Peer(mockAddress, mockPort);
     peerMock.setStatus("OK");
 
-    const monitor = app.resolvePlugin("p2p");
+    const monitor = app.resolve("p2p");
     monitor.peers = {};
     monitor.peers[peerMock.ip] = peerMock;
 });
 
 afterAll(async () => {
-    const monitor = app.resolvePlugin("p2p");
+    const monitor = app.resolve("p2p");
     monitor.peers = {};
 
     await tearDown();

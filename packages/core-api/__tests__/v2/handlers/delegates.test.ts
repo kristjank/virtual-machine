@@ -7,8 +7,8 @@ import { blocks2to100 } from "../../../../core-test-utils/src/fixtures/testnet/b
 import { models } from "@arkecosystem/crypto";
 const { Block } = models;
 
-import { app } from "@arkecosystem/core-container";
 import { PostgresConnection } from "@arkecosystem/core-database-postgres";
+import { app } from "@arkecosystem/core-kernel";
 
 const delegate = {
     username: "genesis_9",
@@ -155,7 +155,7 @@ describe("API 2.0 - Delegates", () => {
                 it("should GET all blocks for a delegate by the given identifier", async () => {
                     // save a new block so that we can make the request with generatorPublicKey
                     const block2 = new Block(blocks2to100[0]);
-                    const database = app.resolvePlugin<PostgresConnection>("database");
+                    const database = app.resolve<PostgresConnection>("database");
                     await database.saveBlock(block2);
 
                     const response = await utils[request](

@@ -1,5 +1,5 @@
 /* tslint:disable:no-shadowed-variable member-ordering max-classes-per-file */
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { slots } from "@arkecosystem/crypto";
 import { config as localConfig } from "./config";
 import { Monitor } from "./monitor";
@@ -96,7 +96,7 @@ export class NetworkState {
      * Returns the current network state. Peers are updated before the call.
      */
     public static analyze(monitor: Monitor): NetworkState {
-        const lastBlock = app.resolvePlugin("blockchain").getLastBlock();
+        const lastBlock = app.resolve("blockchain").getLastBlock();
 
         const peers = monitor.getPeers();
         const minimumNetworkReach = localConfig.get("minimumNetworkReach", 20);

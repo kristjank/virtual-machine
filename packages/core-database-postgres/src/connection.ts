@@ -7,7 +7,7 @@ import pluralize from "pluralize";
 
 import { ConnectionInterface } from "@arkecosystem/core-database";
 
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 
 import { roundCalculator } from "@arkecosystem/core-utils";
 import { Bignum, models } from "@arkecosystem/crypto";
@@ -60,7 +60,7 @@ export class PostgresConnection extends ConnectionInterface {
 
             return this;
         } catch (error) {
-            app.forceExit("Unable to connect to the database!", error);
+            // app.terminate("Unable to connect to the database!", error);
         }
 
         return null;

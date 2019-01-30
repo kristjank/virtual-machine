@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { transformPlugins } from "../transformers/plugins";
 
 const appConfig = app.getConfig();
@@ -7,7 +7,7 @@ export const config = {
     async handler(request, h) {
         return {
             data: {
-                version: app.getVersion(),
+                version: app.version(),
                 network: {
                     version: appConfig.get("network.pubKeyHash"),
                     name: appConfig.get("network.name"),

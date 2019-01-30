@@ -1,28 +1,42 @@
-import { Container, Logger } from "@arkecosystem/core-interfaces";
+import { Support } from "@arkecosystem/core-kernel";
 import { defaults } from "./defaults";
 import { startServer } from "./server";
 
-/**
- * The struct used by the plugin manager.
- * @type {Object}
- */
-export const plugin: Container.PluginDescriptor = {
-    pkg: require("../package.json"),
-    defaults,
-    alias: "graphql",
-    async register(container: Container.IContainer, options) {
-        if (!options.enabled) {
-            container.resolvePlugin<Logger.ILogger>("logger").info("GraphQL API is disabled :grey_exclamation:");
+export class ServiceProvider extends Support.AbstractServiceProvider {
+    /**
+     * Register any application services.
+     */
+    public async register(): Promise<void> {
+        if (!this.opts.enabled) {
+            this.app.logger.info("GraphQL API is disabled :grey_exclamation:");
             return;
         }
 
-        return startServer(options);
-    },
-    async deregister(container: Container.IContainer, options) {
-        if (options.enabled) {
-            container.resolvePlugin<Logger.ILogger>("logger").info("Stopping GraphQL API");
+        return startServer(this.opts);
+    }
 
-            return container.resolvePlugin("graphql").stop();
+    /**
+     * Dispose any application services.
+     */
+    public async dispose(): Promise<void> {
+        if (this.opts.enabled) {
+            this.app.logger.info("Stopping GraphQL API");
+
+            return this.app.resolve("graphql").stop();
         }
-    },
-};
+    }
+
+    /**
+     * The default options of the plugin.
+     */
+    public getDefaults(): Record<string, any> {
+        return defaults;
+    }
+
+    /**
+     * The manifest of the plugin.
+     */
+    public getManifest(): Record<string, any> {
+        return require("../package.json");
+    }
+}

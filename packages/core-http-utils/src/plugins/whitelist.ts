@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import Boom from "boom";
 import mm from "micromatch";
 
@@ -23,7 +23,7 @@ export const whitelist = {
                     }
                 }
 
-                app.resolvePlugin("logger").warn(
+                app.resolve("logger").warn(
                     `${remoteAddress} tried to access the ${options.name} without being whitelisted :warning:`,
                 );
 

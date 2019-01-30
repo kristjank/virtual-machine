@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import Boom from "boom";
 import Hapi from "hapi";
 import { transactionsRepository } from "../../../repositories";
@@ -57,7 +57,7 @@ export class NodeController extends Controller {
                     constants: this.config.getMilestone(this.blockchain.getLastHeight()),
                     feeStatistics: super.toCollection(request, feeStatisticsData, "fee-statistics"),
                     transactionPool: {
-                        maxTransactionAge: app.resolveOptions("transactionPool").maxTransactionAge,
+                        maxTransactionAge: app.config("transactionPool").maxTransactionAge,
                     },
                 },
             };

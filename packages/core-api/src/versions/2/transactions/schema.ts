@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { Joi } from "@arkecosystem/crypto";
 import { pagination } from "../shared/schemas/pagination";
 
@@ -47,7 +47,7 @@ export const store: object = {
     payload: {
         transactions: Joi.transactionArray()
             .min(1)
-            .max(app.resolveOptions("transactionPool").maxTransactionsPerRequest)
+            .max(app.config("transactionPool").maxTransactionsPerRequest)
             .options({ stripUnknown: true }),
     },
 };

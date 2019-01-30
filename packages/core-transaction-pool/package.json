@@ -32,11 +32,10 @@
         "updates": "../../node_modules/npm-check-updates/bin/npm-check-updates -a"
     },
     "dependencies": {
-        "@arkecosystem/core-container": "^2.1.0",
+        "@arkecosystem/core-kernel": "^2.1.0",
         "@arkecosystem/core-database": "^2.1.0",
         "@arkecosystem/core-database-postgres": "^2.1.0",
         "@arkecosystem/crypto": "^2.1.0",
-        "@arkecosystem/core-interfaces": "^2.1.0",
         "@types/better-sqlite3": "^5.2.0",
         "@types/fs-extra": "^5.0.4",
         "@types/pluralize": "^0.0.29",
@@ -63,5 +62,8 @@
     },
     "jest": {
         "preset": "../../jest-preset.json"
+    },
+    "core": {
+        "alias": "transactionPool"
     }
 }

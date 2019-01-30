@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import Boom from "boom";
 
 export const transactionPayload = {
@@ -18,7 +18,7 @@ export const transactionPayload = {
                     return h.continue;
                 }
 
-                const transactionPool = app.resolveOptions("transactionPool");
+                const transactionPool = app.config("transactionPool");
 
                 if (!transactionPool) {
                     return h.continue;

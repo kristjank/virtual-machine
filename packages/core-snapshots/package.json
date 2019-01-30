@@ -28,8 +28,7 @@
         "updates": "../../node_modules/npm-check-updates/bin/npm-check-updates -a"
     },
     "dependencies": {
-        "@arkecosystem/core-interfaces": "^2.1.0",
-        "@arkecosystem/core-container": "^2.1.0",
+        "@arkecosystem/core-kernel": "^2.1.0",
         "@arkecosystem/core-database-postgres": "^2.1.0",
         "@arkecosystem/crypto": "^2.1.0",
         "@types/bluebird": "^3.5.25",
@@ -50,6 +49,9 @@
         "pluralize": "^7.0.0",
         "xcase": "^2.0.1"
     },
+    "devDependencies": {
+        "@types/pg-query-stream": "^1.0.2"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -59,7 +61,7 @@
     "jest": {
         "preset": "../../jest-preset.json"
     },
-    "devDependencies": {
-        "@types/pg-query-stream": "^1.0.2"
+    "core": {
+        "alias": "snapshots"
     }
 }

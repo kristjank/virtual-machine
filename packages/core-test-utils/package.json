@@ -29,8 +29,7 @@
         "updates": "../../node_modules/npm-check-updates/bin/npm-check-updates -a"
     },
     "dependencies": {
-        "@arkecosystem/core-interfaces": "^2.1.0",
-        "@arkecosystem/core-container": "^2.1.0",
+        "@arkecosystem/core-kernel": "^2.1.0",
         "@arkecosystem/core-jest-matchers": "^2.1.0",
         "@arkecosystem/crypto": "^2.1.0",
         "@types/bip39": "^2.4.1",
@@ -38,7 +37,7 @@
         "@types/lodash.isequal": "^4.5.3",
         "@types/lodash.isstring": "^4.0.4",
         "@types/lodash.sortby": "^4.7.4",
-        "awilix": "^4.0.1",
+        "awilix": "^4.2.0",
         "bip39": "^2.5.0",
         "lodash.get": "^4.4.2",
         "lodash.isequal": "^4.5.0",

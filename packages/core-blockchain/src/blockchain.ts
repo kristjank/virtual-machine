@@ -1,7 +1,6 @@
 /* tslint:disable:max-line-length */
-import { app } from "@arkecosystem/core-container";
 import { PostgresConnection } from "@arkecosystem/core-database-postgres";
-import { Blockchain as blockchain, EventEmitter, Logger, P2P, TransactionPool } from "@arkecosystem/core-interfaces";
+import { app, Contracts } from "@arkecosystem/core-kernel";
 import { models, slots } from "@arkecosystem/crypto";
 
 import delay from "delay";
@@ -12,12 +11,12 @@ import { stateMachine } from "./state-machine";
 import { StateStorage } from "./state-storage";
 import { isBlockChained } from "./utils";
 
-const logger = app.resolvePlugin<Logger.ILogger>("logger");
+const logger = app.resolve<Contracts.Logger.ILogger>("logger");
 const config = app.getConfig();
-const emitter = app.resolvePlugin<EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
 const { Block } = models;
 
-export class Blockchain implements blockchain.IBlockchain {
+export class Blockchain implements Contracts.Blockchain.IBlockchain {
     /**
      * Get the state of the blockchain.
      * @return {IStateStorage}
@@ -31,7 +30,7 @@ export class Blockchain implements blockchain.IBlockchain {
      * @return {P2PInterface}
      */
     get p2p() {
-        return app.resolvePlugin<P2P.IMonitor>("p2p");
+        return app.p2p;
     }
 
     /**
@@ -39,7 +38,7 @@ export class Blockchain implements blockchain.IBlockchain {
      * @return {TransactionPool}
      */
     get transactionPool() {
-        return app.resolvePlugin<TransactionPool.ITransactionPool>("transactionPool");
+        return app.resolve<Contracts.TransactionPool.ITransactionPool>("transactionPool");
     }
 
     /**
@@ -47,7 +46,7 @@ export class Blockchain implements blockchain.IBlockchain {
      * @return {ConnectionInterface}
      */
     get database() {
-        return app.resolvePlugin<PostgresConnection>("database");
+        return app.resolve<PostgresConnection>("database");
     }
 
     public isStopped: boolean;
@@ -316,10 +315,7 @@ export class Blockchain implements blockchain.IBlockchain {
 
         // If the current chain height is H and we will be removing blocks [N, H],
         // then blocksToRemove[] will contain blocks [N - 1, H - 1].
-        const blocksToRemove = await this.database.getBlocks(
-            this.state.getLastBlock().data.height - nblocks,
-            nblocks,
-        );
+        const blocksToRemove = await this.database.getBlocks(this.state.getLastBlock().data.height - nblocks, nblocks);
 
         const revertLastBlock = async () => {
             // tslint:disable-next-line:no-shadowed-variable

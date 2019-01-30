@@ -1,21 +1,13 @@
-import { app } from "@arkecosystem/core-container";
 import { WalletManager } from "@arkecosystem/core-database";
 import { PostgresConnection } from "@arkecosystem/core-database-postgres";
+import { app } from "@arkecosystem/core-kernel";
 import { constants, crypto, isException, models } from "@arkecosystem/crypto";
 
 const { Wallet } = models;
 const { TransactionTypes } = constants;
 
 export class PoolWalletManager extends WalletManager {
-    public database = app.resolvePlugin<PostgresConnection>("database");
-
-    /**
-     * Create a new pool wallet manager instance.
-     * @constructor
-     */
-    constructor() {
-        super();
-    }
+    public database = app.resolve<PostgresConnection>("database");
 
     /**
      * Get a wallet by the given address. If wallet is not found it is copied from blockchain

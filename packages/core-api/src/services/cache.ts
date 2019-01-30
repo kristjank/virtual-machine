@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { createHash } from "crypto";
 import Hapi from "hapi";
 
@@ -36,7 +36,7 @@ export class ServerCache {
     }
 
     private getCacheTimeout(): number | boolean {
-        const { generateTimeout } = app.resolveOptions("api").cache;
+        const { generateTimeout } = app.config("api").cache;
 
         return JSON.parse(generateTimeout);
     }

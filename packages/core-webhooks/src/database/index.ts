@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import fs from "fs-extra";
 import path from "path";
 import Sequelize from "sequelize";
@@ -32,7 +32,7 @@ class Database {
             await this.__runMigrations();
             this.__registerModels();
         } catch (error) {
-            app.forceExit("Unable to connect to the database!", error);
+            // app.terminate("Unable to connect to the database!", error);
         }
     }
 

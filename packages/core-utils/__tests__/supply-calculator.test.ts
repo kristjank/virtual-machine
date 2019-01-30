@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import "jest-extended";
 import { calculate } from "../src/supply-calculator";
 
@@ -17,7 +17,7 @@ app.getConfig = jest.fn(() => {
     };
 });
 
-app.resolvePlugin = jest.fn(plugin => {
+app.resolve = jest.fn(plugin => {
     if (plugin === "blockchain") {
         return {
             getLastBlock: () => {

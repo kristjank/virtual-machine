@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { models } from "@arkecosystem/crypto";
 import genesisBlock from "../../core-test-utils/src/config/testnet/genesisBlock.json";
 import { PostgresConnection } from "../src/connection";
@@ -10,7 +10,7 @@ let connection;
 
 beforeAll(async () => {
     await setUp();
-    connection = app.resolvePlugin<PostgresConnection>("database");
+    connection = app.resolve<PostgresConnection>("database");
 });
 
 afterAll(async () => {

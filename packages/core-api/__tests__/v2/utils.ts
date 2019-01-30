@@ -1,4 +1,4 @@
-import { app } from "@arkecosystem/core-container";
+import { app } from "@arkecosystem/core-kernel";
 import { client, NetworkManager, transactionBuilder } from "@arkecosystem/crypto";
 import axios from "axios";
 import "jest-extended";
@@ -12,7 +12,7 @@ class Helpers {
             "Content-Type": "application/json",
         };
 
-        const server = app.resolvePlugin("api");
+        const server = app.resolve("api");
 
         return ApiHelpers.request(server.http, method, url, headers, params);
     }
@@ -24,7 +24,7 @@ class Helpers {
             "Content-Type": "application/json",
         };
 
-        const server = app.resolvePlugin("api");
+        const server = app.resolve("api");
 
         return ApiHelpers.request(server.http, method, url, headers, params);
     }
