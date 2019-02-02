@@ -1,5 +1,4 @@
-import { readFileSync } from "fs";
-import { safeLoad } from "js-yaml";
+import cosmiconfig from "cosmiconfig";
 import { Kernel } from "../contracts";
 
 export class LoadConfiguration {
@@ -8,9 +7,17 @@ export class LoadConfiguration {
      */
     public async bootstrap(app: Kernel.IApplication): Promise<void> {
         try {
-            const config = safeLoad(readFileSync(app.configPath("config.yml"), "utf8"));
+            const explorer = cosmiconfig(app.namespace(), {
+                searchPlaces: [
+                    app.configPath("config.js"),
+                    app.configPath("config.json"),
+                    app.configPath("config.yaml"),
+                    app.configPath("config.yml"),
+                ],
+                stopDir: app.configPath(),
+            });
 
-            for (const [key, value] of Object.entries(config)) {
+            for (const [key, value] of Object.entries(explorer.searchSync().config)) {
                 app.config(key, value);
             }
         } catch (error) {

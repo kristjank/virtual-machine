@@ -51,6 +51,11 @@ export interface IApplication extends IContainer {
     config<T = any>(key: string, value?: T): T;
 
     /**
+     * Get the namespace number of the application.
+     */
+    namespace(): string;
+
+    /**
      * Get the version number of the application.
      */
     version(): string;

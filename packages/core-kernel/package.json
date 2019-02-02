@@ -37,6 +37,7 @@
         "@types/semver": "^5.5.0",
         "awilix": "^4.2.0",
         "axios": "^0.18.0",
+        "cosmiconfig": "^5.0.7",
         "delay": "^4.1.0",
         "env-paths": "^2.0.0",
         "envfile": "^2.3.0",

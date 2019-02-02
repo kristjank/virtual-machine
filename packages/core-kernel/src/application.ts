@@ -5,6 +5,7 @@ import * as Bootstrappers from "./bootstrap";
 import { Container } from "./container";
 import { Blockchain, EventEmitter, Logger, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
+import { ConfigRepository } from "./repositories/config";
 import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container {
@@ -98,6 +99,13 @@ export class Application extends Container {
     }
 
     /**
+     * Get the namespace number of the application.
+     */
+    public namespace(): string {
+        return this.resolve("app.namespace");
+    }
+
+    /**
      * Get the version number of the application.
      */
     public version(): string {
@@ -128,7 +136,7 @@ export class Application extends Container {
     /**
      * Get the path to the data directory.
      */
-    public dataPath(path?: string): string {
+    public dataPath(path: string = ""): string {
         return join(this.getPath("data"), path);
     }
 
@@ -142,7 +150,7 @@ export class Application extends Container {
     /**
      * Get the path to the config directory.
      */
-    public configPath(path?: string): string {
+    public configPath(path: string = ""): string {
         return join(this.getPath("config"), path);
     }
 
@@ -156,7 +164,7 @@ export class Application extends Container {
     /**
      * Get the path to the cache directory.
      */
-    public cachePath(path?: string): string {
+    public cachePath(path: string = ""): string {
         return join(this.getPath("cache"), path);
     }
 
@@ -170,7 +178,7 @@ export class Application extends Container {
     /**
      * Get the path to the log directory.
      */
-    public logPath(path?: string): string {
+    public logPath(path: string = ""): string {
         return join(this.getPath("log"), path);
     }
 
@@ -184,7 +192,7 @@ export class Application extends Container {
     /**
      * Get the path to the temp directory.
      */
-    public tempPath(path?: string): string {
+    public tempPath(path: string = ""): string {
         return join(this.getPath("temp"), path);
     }
 
@@ -296,13 +304,7 @@ export class Application extends Container {
      * Set the specified configuration values.
      */
     private bindConfiguration(config: Record<string, any>): void {
-        const repository = new Map<string, any>();
-
-        for (const [key, value] of Object.entries(config)) {
-            repository.set(key, value);
-        }
-
-        this.bind("config", repository);
+        this.bind("config", new ConfigRepository(this, config));
     }
 
     /**
@@ -329,7 +331,8 @@ export class Application extends Container {
             throw new Error("Unable to detect application token or network.");
         }
 
-        this.bind("app.namespace", `${token}/${network}`);
+        this.bind("app.namespace", `${token}-${network}`);
+        this.bind("app.dirPrefix", `${token}/${network}`);
     }
 
     /**
