@@ -33,8 +33,10 @@ export class EventDispatcher {
     /**
      * Remove a set of listeners from the dispatcher.
      */
-    public forget(eventName: string): void {
-        this.dispatcher.removeListener(eventName);
+    public forget(eventNames: string[]): void {
+        for (const eventName of Object.values(eventNames)) {
+            this.dispatcher.removeListener(eventName);
+        }
     }
 
     /**
