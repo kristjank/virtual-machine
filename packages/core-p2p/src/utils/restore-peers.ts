@@ -20,13 +20,17 @@ export const restorePeers = (): any[] => {
         return [];
     }
 
-    const peers = JSON.parse(readFileSync(path, { encoding: "utf8" }));
-    const { value, error } = Joi.validate(peers, schema);
+    try {
+        const peers = JSON.parse(readFileSync(path, { encoding: "utf8" }));
+        const { value, error } = Joi.validate(peers, schema);
 
-    if (error) {
-        app.logger.warn("Ignoring corrupt peers from cache.");
+        if (error) {
+            app.logger.warn("Ignoring corrupt peers from cache.");
+            return [];
+        }
+
+        return value;
+    } catch (error) {
         return [];
     }
-
-    return value;
 };
