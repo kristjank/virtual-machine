@@ -14,7 +14,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
 
         await monitor.start(this.opts);
 
-        this.app.bind(this.getAlias(), monitor);
+        this.app.bind("p2p", monitor);
     }
 
     /**
@@ -23,7 +23,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async dispose(): Promise<void> {
         this.app.logger.info("Stopping P2P Interface");
 
-        const p2p = this.app.resolve<Monitor>(this.getAlias());
+        const p2p = this.app.resolve<Monitor>("p2p");
         p2p.dumpPeers();
 
         return p2p.server.stop();

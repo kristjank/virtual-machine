@@ -9,7 +9,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async register(): Promise<void> {
         Sentry.init(this.opts);
 
-        this.app.bind(this.getAlias(), Sentry);
+        this.app.bind("error-tracker", Sentry);
     }
 
     /**

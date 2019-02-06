@@ -7,14 +7,14 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
      * Register any application services.
      */
     public async register(): Promise<void> {
-        this.app.bind(this.getAlias(), await startServer(this.opts));
+        this.app.bind("voteReport", await startServer(this.opts));
     }
 
     /**
      * Dispose any application services.
      */
     public async dispose(): Promise<void> {
-        return this.app.resolve(this.getAlias()).stop();
+        return this.app.resolve("voteReport").stop();
     }
 
     /**

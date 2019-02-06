@@ -14,7 +14,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
 
         const connection = await databaseManager.makeConnection(new PostgresConnection(this.opts));
 
-        this.app.bind(this.getAlias(), connection);
+        this.app.bind("database", connection);
     }
 
     /**
@@ -23,7 +23,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async dispose(): Promise<void> {
         this.app.logger.info("Closing Database Connection");
 
-        return this.app.resolve<PostgresConnection>(this.getAlias()).disconnect();
+        return this.app.resolve<PostgresConnection>("database").disconnect();
     }
 
     /**

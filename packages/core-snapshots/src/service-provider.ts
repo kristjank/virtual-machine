@@ -10,7 +10,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async register(): Promise<void> {
         const manager = new SnapshotManager(this.opts);
 
-        this.app.bind(this.getAlias(), manager.make(this.app.resolve<PostgresConnection>("database")));
+        this.app.bind("snapshots", manager.make(this.app.resolve<PostgresConnection>("database")));
     }
 
     /**

@@ -27,7 +27,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
             driver.debug(`Temp Directory => ${process.env.CORE_PATH_TEMP}`);
         }
 
-        this.app.bind(this.getAlias(), driver);
+        this.app.bind("logger", driver);
     }
 
     /**

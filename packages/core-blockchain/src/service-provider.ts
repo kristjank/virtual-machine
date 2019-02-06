@@ -19,14 +19,14 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
             await blockchain.start();
         }
 
-        this.app.bind(this.getAlias(), blockchain);
+        this.app.bind("blockchain", blockchain);
     }
 
     /**
      * Dispose any application services.
      */
     public async dispose(): Promise<void> {
-        await this.app.resolve<Blockchain>(this.getAlias()).stop();
+        await this.app.resolve<Blockchain>("blockchain").stop();
     }
 
     /**

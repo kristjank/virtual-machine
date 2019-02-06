@@ -52,15 +52,6 @@ export abstract class AbstractServiceProvider {
     }
 
     /**
-     * The alias of the plugin.
-     */
-    public getAlias(): string {
-        const { core } = this.getManifest();
-
-        return core ? core.alias : this.getName();
-    }
-
-    /**
      * The default options of the plugin.
      */
     /**
@@ -74,7 +65,7 @@ export abstract class AbstractServiceProvider {
      * Get the services provided by the provider.
      */
     public provides(): string[] {
-        return [this.getAlias()];
+        return [];
     }
 
     /**

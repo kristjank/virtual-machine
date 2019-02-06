@@ -8,7 +8,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async register(): Promise<void> {
         this.app.logger.info("Starting Database Manager");
 
-        this.app.bind(this.getAlias(), new DatabaseManager());
+        this.app.bind("databaseManager", new DatabaseManager());
     }
 
     /**

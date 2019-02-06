@@ -15,7 +15,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
 
         await transactionPoolManager.makeConnection(new TransactionPool(this.opts));
 
-        this.app.bind(this.getAlias(), transactionPoolManager.connection());
+        this.app.bind("transactionPool", transactionPoolManager.connection());
     }
 
     /**
@@ -24,7 +24,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async dispose(): Promise<void> {
         this.app.logger.info("Disconnecting from transaction pool");
 
-        this.app.resolve(this.getAlias()).disconnect();
+        this.app.resolve("transactionPool").disconnect();
     }
 
     /**

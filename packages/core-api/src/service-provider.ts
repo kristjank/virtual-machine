@@ -15,7 +15,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
         const server = new Server(this.opts);
         await server.start();
 
-        this.app.bind(this.getAlias(), server);
+        this.app.bind("api", server);
     }
 
     /**
@@ -25,7 +25,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
         if (this.opts.enabled) {
             this.app.logger.info(`Stopping Public API`);
 
-            await this.app.resolve<Server>(this.getAlias()).stop();
+            await this.app.resolve<Server>("api").stop();
         }
     }
 
