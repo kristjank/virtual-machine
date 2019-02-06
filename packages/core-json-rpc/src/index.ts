@@ -21,7 +21,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
 
         await network.init();
 
-        return startServer(this.opts);
+        this.app.resolve("json-rpc", await startServer(this.opts));
     }
 
     /**

@@ -13,12 +13,10 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
      * Register any application services.
      */
     public async register(): Promise<void> {
-        const logger = this.app.logger;
-
-        logger.info("[Elasticsearch] Initialising History :hourglass:");
+        this.app.logger.info("[Elasticsearch] Initialising History :hourglass:");
         storage.ensure("history");
 
-        logger.info("[Elasticsearch] Initialising Client :joystick:");
+        this.app.logger.info("[Elasticsearch] Initialising Client :joystick:");
         await client.setUp(this.opts.client);
 
         blockIndex.setUp(this.opts.chunkSize);
@@ -26,7 +24,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
         walletIndex.setUp(this.opts.chunkSize);
         roundIndex.setUp(this.opts.chunkSize);
 
-        return startServer(this.opts.server);
+        this.app.bind("elasticsearch", await startServer(this.opts.server));
     }
 
     /**
@@ -35,7 +33,7 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     public async dispose(): Promise<void> {
         this.app.logger.info("[Elasticsearch] Stopping API :warning:");
 
-        return this.app.resolve("elasticsearch").stop();
+        await this.app.resolve("elasticsearch").stop();
     }
 
     /**

@@ -1,4 +1,4 @@
-import { AbstractServiceProvider } from "../../support";
+import { AbstractServiceProvider } from "../support";
 
 export interface IContainer {
     /**

@@ -2,6 +2,7 @@ import { existsSync, removeSync, writeFileSync } from "fs-extra";
 import camelCase from "lodash/camelCase";
 import { join } from "path";
 import * as Bootstrappers from "./bootstrap";
+import { ConfigFactory } from "./config";
 import { Container } from "./container";
 import { Blockchain, EventEmitter, Logger, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
@@ -304,6 +305,7 @@ export class Application extends Container {
      * Set the specified configuration values.
      */
     private bindConfiguration(config: Record<string, any>): void {
+        this.bind("configLoader", ConfigFactory.make(this, "local")); // @TODO
         this.bind("config", new ConfigRepository(this, config));
     }
 

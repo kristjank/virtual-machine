@@ -26,15 +26,6 @@ export class ServiceProvider extends Support.AbstractServiceProvider {
     }
 
     /**
-     * Dispose any application services.
-     */
-    public async dispose(): Promise<void> {
-        this.app.logger.info("Stopping Forger Manager");
-
-        await this.app.resolve("forger").stop();
-    }
-
-    /**
      * The default options of the plugin.
      */
     public getDefaults(): Record<string, any> {

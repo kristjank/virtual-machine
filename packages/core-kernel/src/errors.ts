@@ -63,3 +63,21 @@ export class InvalidVersion extends KernelError {
         );
     }
 }
+
+export class InvalidApplicationConfiguration extends KernelError {
+    constructor() {
+        super("Unable to load the application configuration file.");
+    }
+}
+
+export class InvalidEnvironmentConfiguration extends KernelError {
+    constructor() {
+        super("Unable to load the environment file.");
+    }
+}
+
+export class InvalidConfigurationAdapter extends KernelError {
+    constructor() {
+        super("Unable to load the environment file.");
+    }
+}
