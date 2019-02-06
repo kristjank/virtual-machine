@@ -5,8 +5,8 @@ import { format } from "winston";
 
 const { colorize, combine, timestamp, printf } = format;
 
-const formatter = (colorOutput: boolean = true) =>
-    combine(
+export function formatter(colorOutput: boolean = true) {
+    return combine(
         colorize(),
         timestamp(),
         printf(info => {
@@ -41,5 +41,4 @@ const formatter = (colorOutput: boolean = true) =>
             return `[${dateTime}][${level}]: ${message}`;
         }),
     );
-
-export { formatter };
+}

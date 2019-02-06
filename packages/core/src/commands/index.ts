@@ -18,12 +18,7 @@ export async function startRelay(options, version) {
 
 export async function startForger(options, version) {
     await app.setUp(version, options, {
-        include: [
-            "@arkecosystem/core-event-emitter",
-            "@arkecosystem/core-logger",
-            "@arkecosystem/core-logger-winston",
-            "@arkecosystem/core-forger",
-        ],
+        include: ["@arkecosystem/core-forger"],
         options: {
             "@arkecosystem/core-forger": {
                 bip38: options.bip38 || process.env.CORE_FORGER_BIP38,

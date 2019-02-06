@@ -72,7 +72,6 @@
         "@arkecosystem/core-forger": "^2.1.0",
         "@arkecosystem/core-graphql": "^2.1.0",
         "@arkecosystem/core-json-rpc": "^2.1.0",
-        "@arkecosystem/core-logger-winston": "^2.1.0",
         "@arkecosystem/core-p2p": "^2.1.0",
         "@arkecosystem/core-snapshots": "^2.1.0",
         "@arkecosystem/core-transaction-pool": "^2.1.0",

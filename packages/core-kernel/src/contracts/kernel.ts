@@ -190,3 +190,61 @@ export interface IApplication extends IContainer {
      */
     terminate(): void;
 }
+
+export interface ILogger {
+    /**
+     * System is unusable.
+     */
+    emergency(message: any): void;
+
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     */
+    alert(message: any): void;
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     */
+    critical(message: any): void;
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     */
+    error(message: any): void;
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     */
+    warning(message: any): void;
+
+    /**
+     * Normal but significant events.
+     */
+    notice(message: any): void;
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     */
+    info(message: any): void;
+
+    /**
+     * Detailed debug information.
+     */
+    debug(message: any): void;
+
+    /**
+     * Logs with an arbitrary level.
+     */
+    log(level: string, message: any): void;
+}
