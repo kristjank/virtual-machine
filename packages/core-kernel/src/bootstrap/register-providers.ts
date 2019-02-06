@@ -3,9 +3,6 @@ import { Kernel } from "../contracts";
 import { AbstractServiceProvider } from "../support/service-provider";
 
 export class RegisterProviders {
-    /**
-     * Register all of the configured providers.
-     */
     public async bootstrap(app: Kernel.IApplication): Promise<void> {
         const providers = app.config("providers");
 
@@ -22,9 +19,6 @@ export class RegisterProviders {
         }
     }
 
-    /**
-     * Check if all of the required dependencies are registered.
-     */
     private satisfiesDependencies(app: Kernel.IApplication, serviceProvider: AbstractServiceProvider): boolean {
         const dependencies = serviceProvider.depends();
 
