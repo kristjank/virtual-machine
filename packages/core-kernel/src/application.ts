@@ -2,11 +2,10 @@ import { existsSync, removeSync, writeFileSync } from "fs-extra";
 import camelCase from "lodash/camelCase";
 import { join } from "path";
 import * as Bootstrappers from "./bootstrap";
-import { ConfigFactory } from "./config";
+import { ConfigFactory, ConfigRepository } from "./config";
 import { Container } from "./container";
-import { Blockchain, EventEmitter, Logger, P2P, TransactionPool } from "./contracts";
+import { Blockchain, EventEmitter, Kernel, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
-import { ConfigRepository } from "./repositories/config";
 import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container {
@@ -56,8 +55,8 @@ export class Application extends Container {
     /**
      * Get an instance of the application logger.
      */
-    public get logger(): Logger.ILogger {
-        return this.resolve<Logger.ILogger>("logger");
+    public get logger(): Kernel.ILogger {
+        return this.resolve<Kernel.ILogger>("logger");
     }
 
     /**
@@ -273,7 +272,7 @@ export class Application extends Container {
     public enableMaintenance(): void {
         writeFileSync(this.tempPath("maintenance"), JSON.stringify({ time: +new Date() }));
 
-        this.logger.warn("Application is now in maintenance mode.");
+        this.logger.notice("Application is now in maintenance mode.");
     }
 
     /**
@@ -282,7 +281,7 @@ export class Application extends Container {
     public disableMaintenance(): void {
         removeSync(this.tempPath("maintenance"));
 
-        this.logger.warn("Application is now live.");
+        this.logger.notice("Application is now live.");
     }
 
     /**

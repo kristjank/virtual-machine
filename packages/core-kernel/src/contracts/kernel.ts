@@ -247,4 +247,9 @@ export interface ILogger {
      * Logs with an arbitrary level.
      */
     log(level: string, message: any): void;
+
+    /**
+     * Suppress any console output.
+     */
+    muteConsole(suppress: boolean): void;
 }

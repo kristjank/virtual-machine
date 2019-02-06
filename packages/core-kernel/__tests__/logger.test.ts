@@ -1,18 +1,16 @@
-import { AbstractLogger } from "@arkecosystem/core-logger";
 import * as capcon from "capture-console";
 import "jest-extended";
-import * as winston from "winston";
-import { WinstonLogger } from "../../core-logger-winston/src";
+import { Kernel } from "../src/contracts";
+import { Logger } from "../src/logger";
 
-let logger: AbstractLogger;
+let logger: Kernel.ILogger;
 let message;
 
-beforeAll(() => {
-    const driver = new WinstonLogger({
+beforeEach(() => {
+    logger = new Logger({
         transports: [
             {
                 constructor: "Console",
-                package: "winston/lib/winston/transports/console",
                 options: {
                     level: "debug",
                 },
@@ -24,72 +22,34 @@ beforeAll(() => {
         ],
     });
 
-    logger = driver.make();
-
     capcon.startCapture(process.stdout, stdout => {
         message += stdout;
     });
 });
 
 describe("Logger", () => {
-    describe("error", () => {
-        it("should log a message", () => {
-            logger.error("error_message");
+    describe.each(["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"])(
+        "should log a %s message",
+        (level: string) => {
+            test("matches level and message ", async () => {
+                const expectedMessage = `${level}_message`;
+                logger[level](expectedMessage);
 
-            expect(message).toMatch(/error/);
-            expect(message).toMatch(/error_message/);
-            message = null;
-        });
-    });
+                expect(message).toInclude(level);
+                expect(message).toInclude(expectedMessage);
+                message = null;
+            });
+        },
+    );
 
-    describe("warn", () => {
-        it("should log a message", () => {
-            logger.warn("warning_message");
-
-            expect(message).toMatch(/warn/);
-            expect(message).toMatch(/warning_message/);
-            message = null;
-        });
-    });
-
-    describe("info", () => {
-        it("should log a message", () => {
-            logger.info("info_message");
-
-            expect(message).toMatch(/info/);
-            expect(message).toMatch(/info_message/);
-            message = null;
-        });
-    });
-
-    describe("debug", () => {
-        it("should log a message", () => {
-            logger.debug("debug_message");
-
-            expect(message).toMatch(/debug/);
-            expect(message).toMatch(/debug_message/);
-            message = null;
-        });
-    });
-
-    describe("verbose", () => {
-        it("should log a message", () => {
-            logger.verbose("verbose_message");
-
-            expect(message).toMatch(/verbose/);
-            expect(message).toMatch(/verbose_message/);
-            message = null;
-        });
-    });
-
-    describe("suppressConsoleOutput", () => {
+    describe("muteConsole", () => {
         it("should suppress console output", () => {
-            logger.suppressConsoleOutput(true);
+            logger.muteConsole(true);
 
             logger.info("silent_message");
             expect(message).toBeNull();
 
-            logger.suppressConsoleOutput(false);
+            logger.muteConsole(false);
 
             logger.info("non_silent_message");
             expect(message).toMatch(/non_silent_message/);

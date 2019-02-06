@@ -5040,6 +5040,11 @@ drbg.js@^1.0.1:
     create-hash "^1.1.2"
     create-hmac "^1.1.4"
 
+driver@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/driver/-/driver-1.0.0.tgz#af42d841260757f1699cd7f17beec235232d3893"
+  integrity sha512-beS/9xzokH5BMdOcJ91QL3eghbtHvst4BI29iabJXC32XOrztwJnh1CQyZl5T8jDwkczIaESYTmZHPfJKjfHLA==
+
 ducky@2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/ducky/-/ducky-2.6.11.tgz#b1ed769398a4b563d3dd55c0b28ab8b93bcfe3de"
