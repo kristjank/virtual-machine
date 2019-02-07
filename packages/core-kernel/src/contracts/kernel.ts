@@ -261,17 +261,17 @@ export interface IEventDispatcher {
     /**
      * Register an event listener with the dispatcher.
      */
-    listen(eventNames: string[], listener: any): void;
+    listen(eventNames: string | string[], listener: any): void;
 
     /**
      * Fire an event and call the listeners.
      */
-    dispatch(eventName: string, listener: any): void;
+    dispatch(eventNames: string | string[], listener: any): void;
 
     /**
      * Remove a set of listeners from the dispatcher.
      */
-    forget(eventNames: string[]): void;
+    forget(eventNames: string | string[]): void;
 
     /**
      * Determine if a given event has listeners.

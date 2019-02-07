@@ -1,11 +1,8 @@
 import "jest-extended";
-import { EventDispatcher } from "../../src/events/dispatcher";
+import { Kernel } from "../src/contracts";
+import { EventDispatcher } from "../src/event-dispatcher";
 
-let dispatcher;
-
-beforeEach(() => {
-    dispatcher = new EventDispatcher();
-});
+const dispatcher: Kernel.IEventDispatcher = new EventDispatcher();
 
 describe("EventDispatcher", () => {
     it("should register a listener", () => {

@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3";
-import { Kernel } from "../contracts";
+import { Kernel } from "./contracts";
 
 export class EventDispatcher implements Kernel.IEventDispatcher {
     /**
@@ -10,7 +10,7 @@ export class EventDispatcher implements Kernel.IEventDispatcher {
     /**
      * Register an event listener with the dispatcher.
      */
-    public listen(eventNames: string[], listener: any): void {
+    public listen(eventNames: string | string[], listener: any): void {
         if (!Array.isArray(eventNames)) {
             eventNames = [eventNames];
         }
@@ -23,14 +23,20 @@ export class EventDispatcher implements Kernel.IEventDispatcher {
     /**
      * Fire an event and call the listeners.
      */
-    public dispatch(eventName: string, listener: any): void {
-        this.dispatcher.emit(eventName, listener);
+    public dispatch(eventNames: string | string[], listener: any): void {
+        if (!Array.isArray(eventNames)) {
+            eventNames = [eventNames];
+        }
+
+        for (const eventName of Object.values(eventNames)) {
+            this.dispatcher.emit(eventName, listener);
+        }
     }
 
     /**
      * Remove a set of listeners from the dispatcher.
      */
-    public forget(eventNames: string[]): void {
+    public forget(eventNames: string | string[]): void {
         if (!Array.isArray(eventNames)) {
             eventNames = [eventNames];
         }

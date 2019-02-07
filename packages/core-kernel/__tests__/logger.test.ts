@@ -3,33 +3,22 @@ import "jest-extended";
 import { Kernel } from "../src/contracts";
 import { Logger } from "../src/logger";
 
-let logger: Kernel.ILogger;
+const logger: Kernel.ILogger = new Logger();
 let message;
 
 beforeEach(() => {
-    logger = new Logger({
-        transports: [
-            {
-                constructor: "Console",
-                options: {
-                    level: "debug",
-                },
-            },
-            {
-                constructor: "File",
-                options: { filename: "tmp.log", level: "silly" },
-            },
-        ],
-    });
-
     capcon.startCapture(process.stdout, stdout => {
         message += stdout;
+    });
+
+    capcon.startCapture(process.stderr, stderr => {
+        message += stderr;
     });
 });
 
 describe("Logger", () => {
     describe.each(["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"])(
-        "should log a %s message",
+        "should log message with the level - %s",
         (level: string) => {
             test("matches level and message ", async () => {
                 const expectedMessage = `${level}_message`;
