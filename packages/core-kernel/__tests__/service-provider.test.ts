@@ -1,13 +1,13 @@
-import * as Hapi from "hapi";
 import "jest-extended";
 
-import { Application } from "../src/application";
+import { Kernel } from "../src/contracts";
 import { ServiceProvider } from "./__stubs__/service-provider";
+import { createApp } from "./__support__";
 
-let app: Application;
+let app: Kernel.IApplication;
 let serviceProvider: ServiceProvider;
 beforeEach(() => {
-    app = new Application();
+    app = createApp();
     serviceProvider = new ServiceProvider(app);
 });
 

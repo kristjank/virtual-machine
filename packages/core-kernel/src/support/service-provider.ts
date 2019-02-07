@@ -1,11 +1,10 @@
-// import * as Joi from "joi";
-import { Application } from "../application";
+import { Kernel } from "../contracts";
 
 export abstract class AbstractServiceProvider {
     /**
      * The application implementation.
      */
-    protected app: Application;
+    protected app: Kernel.IApplication;
 
     /**
      * The service provider options.
@@ -15,7 +14,7 @@ export abstract class AbstractServiceProvider {
     /**
      * Create a new service provider instance.
      */
-    public constructor(app: Application, opts: Record<string, any> = {}) {
+    public constructor(app: Kernel.IApplication, opts: Record<string, any> = {}) {
         this.app = app;
         this.opts = opts;
     }
@@ -51,9 +50,6 @@ export abstract class AbstractServiceProvider {
         return this.getManifest().version;
     }
 
-    /**
-     * The default options of the plugin.
-     */
     /**
      * The default options of the plugin.
      */

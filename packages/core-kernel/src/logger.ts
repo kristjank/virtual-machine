@@ -11,7 +11,7 @@ import { Kernel } from "./contracts";
 export class Logger implements Kernel.ILogger {
     private logger: winston.Logger;
 
-    constructor() {
+    constructor(readonly app: Kernel.IApplication) {
         this.logger = winston.createLogger({
             levels: {
                 emergency: 0,
@@ -111,7 +111,7 @@ export class Logger implements Kernel.ILogger {
                 new winston.transports.DailyRotateFile({
                     level: "debug",
                     format: this.formatLog(false),
-                    filename: `${process.env.CORE_PATH_LOG}/%DATE%.log`,
+                    filename: this.app.logPath("%DATE%.log"),
                     datePattern: "YYYY-MM-DD",
                     zippedArchive: true,
                     maxSize: "100m",

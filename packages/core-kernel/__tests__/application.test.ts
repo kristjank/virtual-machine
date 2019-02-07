@@ -2,6 +2,7 @@ import "jest-extended";
 
 import { resolve } from "path";
 import { Application } from "../src/application";
+import { createApp } from "./__support__";
 
 const config = {
     env: "dummy",
@@ -19,14 +20,12 @@ const config = {
 
 let app: Application;
 beforeEach(() => {
-    app = new Application();
-
-    app.bootstrap(config);
+    app = createApp();
 });
 
 describe("Application", () => {
     it("should be booted", () => {
-        expect(app.has("event-emitter")).toBeTrue();
+        expect(app.isBootstrapped()).toBeTrue();
     });
 
     it("config", () => {
