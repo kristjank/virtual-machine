@@ -253,3 +253,30 @@ export interface ILogger {
      */
     muteConsole(suppress: boolean): void;
 }
+
+export interface IEventDispatcher {
+    /**
+     * Register an event listener with the dispatcher.
+     */
+    listen(eventNames: string[], listener: any): void;
+
+    /**
+     * Fire an event and call the listeners.
+     */
+    dispatch(eventName: string, listener: any): void;
+
+    /**
+     * Remove a set of listeners from the dispatcher.
+     */
+    forget(eventNames: string[]): void;
+
+    /**
+     * Determine if a given event has listeners.
+     */
+    has(eventName: string): boolean;
+
+    /**
+     * Get all of the listeners for a given event name.
+     */
+    getListeners(eventName: string): any;
+}
