@@ -13,7 +13,7 @@ class WebhookManager {
      * @return {void}
      */
     public async setUp() {
-        const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+        const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 
         for (const event of app.blockchain.getEvents()) {
             emitter.on(event, async payload => {

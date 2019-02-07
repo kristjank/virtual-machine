@@ -3,7 +3,7 @@ import { app, Contracts } from "@arkecosystem/core-kernel";
 import { client } from "../services/client";
 import { Index } from "./index";
 
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 const database = app.resolve<PostgresConnection>("database");
 
 class WalletIndex extends Index {

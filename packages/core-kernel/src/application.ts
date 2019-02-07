@@ -6,6 +6,8 @@ import { ConfigFactory, ConfigRepository } from "./config";
 import { Container } from "./container";
 import { Blockchain, EventEmitter, Kernel, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
+import { EventDispatcher } from "./event-dispatcher";
+import { Logger } from "./logger";
 import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container implements Kernel.IApplication {
@@ -27,6 +29,8 @@ export class Application extends Container implements Kernel.IApplication {
         this.registerBindings();
 
         this.registerNamespace();
+
+        this.registerCoreServices();
 
         this.registerServiceProviders();
 
@@ -186,7 +190,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     public get emitter(): Kernel.IEventDispatcher {
-        return this.resolve<Kernel.IEventDispatcher>("event-emitter");
+        return this.resolve<Kernel.IEventDispatcher>("events");
     }
 
     private bindConfiguration(config: Record<string, any>): void {
@@ -214,6 +218,12 @@ export class Application extends Container implements Kernel.IApplication {
 
         this.bind("app.namespace", `${token}-${network}`);
         this.bind("app.dirPrefix", `${token}/${network}`);
+    }
+
+    private registerCoreServices(): void {
+        this.bind("events", new EventDispatcher());
+
+        this.bind("log", new Logger(this));
     }
 
     private async registerServiceProviders(): Promise<void> {

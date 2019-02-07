@@ -56,7 +56,7 @@ export class Monitor implements Contracts.P2P.IMonitor {
         this.config = options;
 
         config = app.getConfig();
-        emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+        emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 
         await this.__checkDNSConnectivity(options.dns);
         await this.__checkNTPConnectivity(options.ntp);

@@ -13,7 +13,7 @@ import { isBlockChained } from "./utils";
 
 const logger = app.resolve<Contracts.Logger.ILogger>("logger");
 const config = app.getConfig();
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 const { Block } = models;
 
 export class Blockchain implements Contracts.Blockchain.IBlockchain {

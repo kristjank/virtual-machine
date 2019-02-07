@@ -35,7 +35,7 @@ export class RestoreCommand extends BaseCommand {
 
         await setUpLite(flags);
 
-        const emitter = app.resolvePlugin<EventEmitter.EventEmitter>("event-emitter");
+        const emitter = app.resolvePlugin<EventEmitter.EventEmitter>("events");
 
         const progressBar = new _cliProgress.Bar(
             {

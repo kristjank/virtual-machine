@@ -10,7 +10,7 @@ import { MemPoolTransaction } from "./mem-pool-transaction";
 import { Storage } from "./storage";
 
 const database = app.resolve<PostgresConnection>("database");
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 
 /**
  * Transaction pool. It uses a hybrid storage - caching the data

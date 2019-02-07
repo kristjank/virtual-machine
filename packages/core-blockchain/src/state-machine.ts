@@ -15,7 +15,7 @@ import { Blockchain } from "./blockchain";
 
 const { Block } = models;
 const config = app.getConfig();
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 const logger = app.resolve<Contracts.Logger.ILogger>("logger");
 
 /**

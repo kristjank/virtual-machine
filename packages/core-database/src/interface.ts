@@ -13,7 +13,7 @@ const { TransactionTypes } = constants;
 export abstract class ConnectionInterface {
     // TODO: Convert these to protected/private and provide the appropriate get/setters
     public config = app.getConfig();
-    public emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+    public emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
     public blocksInCurrentRound: any[] = null;
     public stateStarted: boolean = false;
     public restoredDatabaseIntegrity: boolean = false;

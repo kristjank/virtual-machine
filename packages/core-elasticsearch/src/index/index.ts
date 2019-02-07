@@ -3,7 +3,7 @@ import { app } from "@arkecosystem/core-kernel";
 import { client } from "../services/client";
 import { storage } from "../services/storage";
 
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 const database = app.resolve<PostgresConnection>("database");
 
 export abstract class Index {

@@ -9,7 +9,7 @@ import { Index } from "./index";
 import { models } from "@arkecosystem/crypto";
 const { Transaction } = models;
 
-const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("event-emitter");
+const emitter = app.resolve<Contracts.EventEmitter.EventEmitter>("events");
 const database = app.resolve<PostgresConnection>("database");
 
 class TransactionIndex extends Index {
