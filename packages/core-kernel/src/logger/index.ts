@@ -21,6 +21,17 @@ export class Logger implements Kernel.ILogger {
             },
         });
 
+        winston.addColors({
+            emerg: "red",
+            alert: "red",
+            crit: "red",
+            error: "red",
+            warning: "yellow",
+            notice: "green",
+            info: "blue",
+            debug: "magenta",
+        });
+
         this.registerTransports(options);
     }
 

@@ -191,6 +191,9 @@ export interface IApplication extends IContainer {
     terminate(): void;
 }
 
+/**
+ * @see https://tools.ietf.org/html/rfc5424
+ */
 export interface ILogger {
     /**
      * System is unusable.
