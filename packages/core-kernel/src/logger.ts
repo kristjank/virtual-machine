@@ -2,7 +2,6 @@ import chalk from "chalk";
 import "colors";
 import dayjs from "dayjs-ext";
 import isEmpty from "lodash/isEmpty";
-import emoji from "node-emoji";
 import { inspect } from "util";
 import * as winston from "winston";
 import "winston-daily-rotate-file";
@@ -132,7 +131,7 @@ export class Logger implements Kernel.ILogger {
                 const infoLevel = info[Symbol.for("level")];
 
                 let level = infoLevel.toUpperCase();
-                let message = emoji.emojify(info.message) || JSON.stringify(info.meta);
+                let message = info.message || JSON.stringify(info.meta);
 
                 if (colorOutput) {
                     level = {

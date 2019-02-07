@@ -4,25 +4,13 @@ import { ensureDirSync, existsSync } from "fs-extra";
 import { resolve } from "path";
 
 export class Environment {
-    /**
-     * Create a new environment instance.
-     * @param  {Object} variables
-     * @return {void}
-     */
     constructor(readonly variables: any) {}
 
-    /**
-     * Set up the environment variables.
-     */
     public setUp() {
         this.exportPaths();
         this.exportVariables();
     }
 
-    /**
-     * Export all path variables for the core environment.
-     * @return {void}
-     */
     private exportPaths() {
         const allowedKeys = ["data", "config", "cache", "log", "temp"];
 
@@ -48,10 +36,6 @@ export class Environment {
         }
     }
 
-    /**
-     * Export all additional variables for the core environment.
-     * @return {void}
-     */
     private exportVariables() {
         process.env.CORE_TOKEN = this.variables.token;
 

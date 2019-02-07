@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
 
-export class ExtendableError extends Error {
+export class KernelError extends Error {
     constructor(message: string) {
         super(message);
 
@@ -17,8 +17,6 @@ export class ExtendableError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-
-export class KernelError extends ExtendableError {}
 
 export class DirectoryNotFound extends KernelError {
     constructor(value: string) {

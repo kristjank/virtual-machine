@@ -8,9 +8,6 @@ interface FileEvent {
 }
 
 export class Watcher {
-    /**
-     * Create a new watcher instance.
-     */
     public constructor(readonly app: Kernel.IApplication) {}
 
     /**

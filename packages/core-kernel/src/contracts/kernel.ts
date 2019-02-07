@@ -1,4 +1,8 @@
+import { BuildResolverOptions, Constructor, FunctionReturning, Resolver } from "awilix";
 import { AbstractServiceProvider } from "../support";
+import { IBlockchain } from "./core-blockchain";
+import { IMonitor } from "./core-p2p";
+import { ITransactionPool } from "./core-transaction-pool";
 
 export interface IContainer {
     /**
@@ -25,6 +29,14 @@ export interface IContainer {
      * Determine if the given name has been registered.
      */
     has(name: string): boolean;
+
+    /**
+     * Given a class or function, builds it up and returns it.
+     */
+    call(
+        targetOrResolver: FunctionReturning<{}> | Constructor<{}> | Resolver<{}>,
+        opts?: BuildResolverOptions<{}>,
+    ): any;
 }
 
 export interface IApplication extends IContainer {
@@ -44,6 +56,31 @@ export interface IApplication extends IContainer {
      * Reboot the application.
      */
     reboot(): void;
+
+    /**
+     * Get an instance of the application logger.
+     */
+    logger(): ILogger;
+
+    /**
+     * Get an instance of the application blockchain.
+     */
+    blockchain(): IBlockchain;
+
+    /**
+     * Get an instance of the application p2p layer.
+     */
+    p2p(): IMonitor;
+
+    /**
+     * Get an instance of the application transaction pool.
+     */
+    transactionPool(): ITransactionPool;
+
+    /**
+     * Get an instance of the application emitter.
+     */
+    emitter(): IEventDispatcher;
 
     /**
      * Get or set the specified configuration value.
