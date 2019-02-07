@@ -1,6 +1,5 @@
 import cosmiconfig from "cosmiconfig";
 import { parseFileSync } from "envfile";
-import { Kernel } from "../../contracts";
 import { InvalidApplicationConfiguration, InvalidEnvironmentConfiguration } from "../../errors";
 import { BaseAdapter } from "./base";
 

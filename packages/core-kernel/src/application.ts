@@ -8,7 +8,7 @@ import { Blockchain, EventEmitter, Kernel, P2P, TransactionPool } from "./contra
 import { DirectoryNotFound } from "./errors";
 import { AbstractServiceProvider } from "./support";
 
-export class Application extends Container {
+export class Application extends Container implements Kernel.IApplication {
     /**
      * Holds the providers that have been registered.
      */
@@ -41,26 +41,6 @@ export class Application extends Container {
         this.terminate();
 
         this.registerServiceProviders();
-    }
-
-    public get logger(): Kernel.ILogger {
-        return this.resolve<Kernel.ILogger>("logger");
-    }
-
-    public get blockchain(): Blockchain.IBlockchain {
-        return this.resolve<Blockchain.IBlockchain>("blockchain");
-    }
-
-    public get p2p(): P2P.IMonitor {
-        return this.resolve<P2P.IMonitor>("p2p");
-    }
-
-    public get transactionPool(): TransactionPool.ITransactionPool {
-        return this.resolve<TransactionPool.ITransactionPool>("transactionPool");
-    }
-
-    public get emitter(): EventEmitter.EventEmitter {
-        return this.resolve<EventEmitter.EventEmitter>("event-emitter");
     }
 
     public config<T = any>(key: string, value?: T): T {
@@ -189,17 +169,31 @@ export class Application extends Container {
         this.disposeServiceProviders();
     }
 
-    /**
-     * Set the specified configuration values.
-     */
+    public get logger(): Kernel.ILogger {
+        return this.resolve<Kernel.ILogger>("logger");
+    }
+
+    public get blockchain(): Blockchain.IBlockchain {
+        return this.resolve<Blockchain.IBlockchain>("blockchain");
+    }
+
+    public get p2p(): P2P.IMonitor {
+        return this.resolve<P2P.IMonitor>("p2p");
+    }
+
+    public get transactionPool(): TransactionPool.ITransactionPool {
+        return this.resolve<TransactionPool.ITransactionPool>("transactionPool");
+    }
+
+    public get emitter(): Kernel.IEventDispatcher {
+        return this.resolve<Kernel.IEventDispatcher>("event-emitter");
+    }
+
     private bindConfiguration(config: Record<string, any>): void {
         this.bind("configLoader", ConfigFactory.make(this, "local")); // @TODO
         this.bind("config", new ConfigRepository(this, config));
     }
 
-    /**
-     * Register the basic bindings into the container.
-     */
     private registerBindings(): void {
         this.bind("app.env", this.config("env"));
 
@@ -210,9 +204,6 @@ export class Application extends Container {
         this.bind("app.version", this.config("version"));
     }
 
-    /**
-     * Register the application namespace into the container.
-     */
     private registerNamespace(): void {
         const token = this.token();
         const network = this.network();
@@ -225,27 +216,18 @@ export class Application extends Container {
         this.bind("app.dirPrefix", `${token}/${network}`);
     }
 
-    /**
-     * Register the application service providers.
-     */
     private async registerServiceProviders(): Promise<void> {
         for (const Bootstrapper of Object.values(Bootstrappers)) {
             await new Bootstrapper().bootstrap(this);
         }
     }
 
-    /**
-     * Dispose the application service providers.
-     */
     private async disposeServiceProviders(): Promise<void> {
         for (const provider of this.providers.values()) {
             await provider.dispose();
         }
     }
 
-    /**
-     * Bind all of the application paths in the container.
-     */
     private bindPathsInContainer(): void {
         for (const [type, path] of Object.entries(this.config("paths"))) {
             this[camelCase(`use_${type}_path`)](path);
@@ -254,9 +236,6 @@ export class Application extends Container {
         }
     }
 
-    /**
-     * Get the path to a directory.
-     */
     private getPath(type: string): string {
         const path = this.resolve(`path.${type}`);
 
@@ -267,9 +246,6 @@ export class Application extends Container {
         return path;
     }
 
-    /**
-     * Set the directory for the given type.
-     */
     private usePath(type: string, path: string): void {
         if (!existsSync(path)) {
             throw new DirectoryNotFound(path);

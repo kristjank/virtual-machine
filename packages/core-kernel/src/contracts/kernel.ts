@@ -40,7 +40,30 @@ export interface IContainer {
 }
 
 export interface IApplication extends IContainer {
-    readonly providers: Set<AbstractServiceProvider>;
+    /**
+     * Get an instance of the application logger.
+     */
+    readonly logger: ILogger;
+
+    /**
+     * Get an instance of the application blockchain.
+     */
+    readonly blockchain: IBlockchain;
+
+    /**
+     * Get an instance of the application p2p layer.
+     */
+    readonly p2p: IMonitor;
+
+    /**
+     * Get an instance of the application transaction pool.
+     */
+    readonly transactionPool: ITransactionPool;
+
+    /**
+     * Get an instance of the application emitter.
+     */
+    readonly emitter: IEventDispatcher;
 
     /**
      * Boot the application's service providers.
@@ -56,31 +79,6 @@ export interface IApplication extends IContainer {
      * Reboot the application.
      */
     reboot(): void;
-
-    /**
-     * Get an instance of the application logger.
-     */
-    logger(): ILogger;
-
-    /**
-     * Get an instance of the application blockchain.
-     */
-    blockchain(): IBlockchain;
-
-    /**
-     * Get an instance of the application p2p layer.
-     */
-    p2p(): IMonitor;
-
-    /**
-     * Get an instance of the application transaction pool.
-     */
-    transactionPool(): ITransactionPool;
-
-    /**
-     * Get an instance of the application emitter.
-     */
-    emitter(): IEventDispatcher;
 
     /**
      * Get or set the specified configuration value.

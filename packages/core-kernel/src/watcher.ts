@@ -10,9 +10,6 @@ interface FileEvent {
 export class Watcher {
     public constructor(readonly app: Kernel.IApplication) {}
 
-    /**
-     * Watch the configuration directory for changes.
-     */
     public async watch(): Promise<void> {
         const configFiles = [".env", "config.yml"];
 

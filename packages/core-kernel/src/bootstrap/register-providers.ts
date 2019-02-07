@@ -14,6 +14,7 @@ export class RegisterProviders {
             if (this.satisfiesDependencies(app, serviceProvider)) {
                 await serviceProvider.register();
 
+                // @TODO: add getter/setter for providers
                 app.providers.add(serviceProvider);
             }
         }
