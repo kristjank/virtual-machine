@@ -16,7 +16,7 @@ export class Application extends Container implements Kernel.IApplication {
     private hasBeenBootstrapped: boolean = false;
     private booted: boolean = false;
 
-    public async boot(config: Record<string, any>): Promise<void> {
+    public bootstrap(config: Record<string, any>): void {
         this.bindConfiguration(config);
 
         this.bindPathsInContainer();
@@ -26,7 +26,9 @@ export class Application extends Container implements Kernel.IApplication {
         this.registerBindings();
 
         this.registerNamespace();
+    }
 
+    public async boot(): Promise<void> {
         await this.registerServiceProviders();
 
         this.booted = true;

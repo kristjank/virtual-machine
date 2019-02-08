@@ -66,9 +66,14 @@ export interface IApplication extends IContainer {
     readonly events: IEventDispatcher;
 
     /**
+     * Bootstrap the application with the given configuration.
+     */
+    bootstrap(config: Record<string, any>): void;
+
+    /**
      * Boot the application.
      */
-    boot(config: Record<string, any>): void;
+    boot(): void;
 
     /**
      * Reboot the application.

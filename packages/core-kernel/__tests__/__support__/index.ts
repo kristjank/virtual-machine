@@ -2,7 +2,10 @@ import { resolve } from "path";
 import { Application } from "../../src/application";
 import { Kernel } from "../../src/contracts";
 
-export async function createApp(config?: Record<string, any>): Promise<Kernel.IApplication> {
+export async function createApp(
+    config?: Record<string, any>,
+    shouldBoot: boolean = true,
+): Promise<Kernel.IApplication> {
     const defaults = {
         env: "unitnet",
         version: "2.1.0",
@@ -22,7 +25,11 @@ export async function createApp(config?: Record<string, any>): Promise<Kernel.IA
     }
 
     const app: Kernel.IApplication = new Application();
-    await app.boot(config);
+    app.bootstrap(config);
+
+    if (shouldBoot) {
+        await app.boot();
+    }
 
     return app;
 }
