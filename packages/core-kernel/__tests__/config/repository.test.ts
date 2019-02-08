@@ -9,7 +9,7 @@ let repository: ConfigRepository;
 
 beforeEach(async () => {
     app = await createApp();
-    repository = new ConfigRepository(app, { hello: "world" });
+    repository = new ConfigRepository({ hello: "world" });
 });
 
 describe("ConfigRepository", () => {

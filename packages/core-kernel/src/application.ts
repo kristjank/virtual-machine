@@ -210,7 +210,7 @@ export class Application extends Container implements Kernel.IApplication {
 
     private bindConfiguration(config: Record<string, any>): void {
         this.bind("configLoader", ConfigFactory.make(this, "local")); // @TODO
-        this.bind("config", new ConfigRepository(this, config));
+        this.bind("config", new ConfigRepository(config));
     }
 
     private registerBindings(): void {
