@@ -1,12 +1,13 @@
 import { resolve } from "path";
 import { Application } from "../../src/application";
+import { Kernel } from "../../src/contracts";
 
-export function createApp() {
+export async function createApp(): Promise<Kernel.IApplication> {
     const config = {
-        env: "dummy",
+        env: "unitnet",
         version: "2.1.0",
         token: "ark",
-        network: "dummy",
+        network: "unitnet",
         paths: {
             data: resolve(__dirname, "../__fixtures__/data"),
             config: resolve(__dirname, "../__fixtures__/config"),
@@ -16,8 +17,8 @@ export function createApp() {
         },
     };
 
-    const app: Application = new Application();
-    app.bootstrap(config);
+    const app: Kernel.IApplication = new Application();
+    await app.boot(config);
 
     return app;
 }

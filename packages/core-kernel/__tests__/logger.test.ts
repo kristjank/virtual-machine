@@ -4,10 +4,14 @@ import { Kernel } from "../src/contracts";
 import { Logger } from "../src/logger";
 import { createApp } from "./__support__";
 
-const logger: Kernel.ILogger = new Logger(createApp());
+let logger: Kernel.ILogger;
 let message;
 
-beforeEach(() => {
+beforeEach(async () => {
+    logger = new Logger(await createApp());
+
+    message = null;
+
     capcon.startCapture(process.stdout, stdout => {
         message += stdout;
     });

@@ -66,14 +66,9 @@ export interface IApplication extends IContainer {
     readonly events: IEventDispatcher;
 
     /**
-     * Boot the application's service providers.
-     */
-    bootstrap(config: Record<string, any>): void;
-
-    /**
      * Boot the application.
      */
-    boot(): void;
+    boot(config: Record<string, any>): void;
 
     /**
      * Reboot the application.
@@ -83,12 +78,27 @@ export interface IApplication extends IContainer {
     /**
      * Register the application service provider.
      */
-    registerProvider(provider: AbstractServiceProvider): void;
+    registerProvider(provider: AbstractServiceProvider): Promise<void>;
 
     /**
      * Create a new provider instance.
      */
     makeProvider(provider: AbstractServiceProvider, opts: Record<string, any>): AbstractServiceProvider;
+
+    /**
+     * Register a listener to run after loading the environment.
+     */
+    afterLoadingEnvironment(listener: any): any;
+
+    /**
+     * Register a listener to run before a bootstrapper.
+     */
+    beforeBootstrapping(bootstrapper: string, listener: any): void;
+
+    /**
+     * Register a listener to run after a bootstrapper.
+     */
+    afterBootstrapping(bootstrapper: string, listener: any): void;
 
     /**
      * Get or set the specified configuration value.

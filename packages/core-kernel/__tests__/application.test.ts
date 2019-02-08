@@ -1,7 +1,7 @@
 import "jest-extended";
 
 import { resolve } from "path";
-import { Application } from "../src/application";
+import { Kernel } from "../src/contracts";
 import { createApp } from "./__support__";
 
 const config = {
@@ -18,9 +18,9 @@ const config = {
     },
 };
 
-let app: Application;
-beforeEach(() => {
-    app = createApp();
+let app: Kernel.IApplication;
+beforeEach(async () => {
+    app = await createApp();
 });
 
 describe("Application", () => {

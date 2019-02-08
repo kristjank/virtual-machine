@@ -6,8 +6,8 @@ import { createApp } from "./__support__";
 
 let app: Kernel.IApplication;
 let serviceProvider: ServiceProvider;
-beforeEach(() => {
-    app = createApp();
+beforeEach(async () => {
+    app = await createApp();
     serviceProvider = new ServiceProvider(app);
 });
 

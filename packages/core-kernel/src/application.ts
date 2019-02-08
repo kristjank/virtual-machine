@@ -12,17 +12,22 @@ import { ProviderRepository } from "./repositories";
 import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container implements Kernel.IApplication {
-    /**
-     * Holds the providers that have been registered.
-     */
-    protected readonly providers: ProviderRepository = new ProviderRepository(this);
+    private readonly providers: ProviderRepository = new ProviderRepository(this);
 
     /**
-     * Indicates if the application has been bootstrapped.
+     * Indicates if the application has been bootstrapped before.
      */
-    private bootstrapped: boolean = false;
+    private hasBeenBootstrapped: boolean = false;
 
-    public bootstrap(config: Record<string, any>): void {
+    /**
+     * Indicates if the application has "booted".
+     */
+    private booted: boolean = false;
+
+    /**
+     * Create a new application instance.
+     */
+    public async boot(config: Record<string, any>): Promise<void> {
         this.bindConfiguration(config);
 
         this.bindPathsInContainer();
@@ -33,27 +38,35 @@ export class Application extends Container implements Kernel.IApplication {
 
         this.registerNamespace();
 
-        this.registerServiceProviders();
+        await this.registerServiceProviders();
 
-        this.bootstrapped = true;
+        this.booted = true;
     }
 
-    public boot(): void {
-        this.registerServiceProviders();
-    }
-
-    public reboot(): void {
+    public async reboot(): Promise<void> {
         this.terminate();
 
-        this.registerServiceProviders();
+        await this.registerServiceProviders();
     }
 
-    public registerProvider(provider: AbstractServiceProvider): void {
-        this.providers.register(provider);
+    public async registerProvider(provider: AbstractServiceProvider): Promise<void> {
+        await this.providers.register(provider);
     }
 
     public makeProvider(provider: AbstractServiceProvider, opts: Record<string, any>): AbstractServiceProvider {
         return this.providers.make(provider, opts);
+    }
+
+    public afterLoadingEnvironment(listener: any): any {
+        return this.afterBootstrapping("LoadEnvironmentVariables", listener);
+    }
+
+    public beforeBootstrapping(bootstrapper: string, listener: any): void {
+        this.events.listen(`bootstrapping: ${bootstrapper}`, listener);
+    }
+
+    public afterBootstrapping(bootstrapper: string, listener: any): void {
+        this.events.listen(`bootstrapped: ${bootstrapper}`, listener);
     }
 
     public config<T = any>(key: string, value?: T): T {
@@ -149,7 +162,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     public isBootstrapped(): boolean {
-        return this.bootstrapped;
+        return this.hasBeenBootstrapped;
     }
 
     public configurationIsCached(): boolean {
@@ -181,7 +194,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     public terminate(): void {
-        this.bootstrapped = false;
+        this.hasBeenBootstrapped = false;
 
         this.disposeServiceProviders();
     }
@@ -236,12 +249,14 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     private async registerServiceProviders(): Promise<void> {
+        this.hasBeenBootstrapped = true;
+
         for (const Bootstrapper of Object.values(Bootstrappers)) {
-            this.events.dispatch("bootstrapping", Bootstrapper);
+            this.events.dispatch(`bootstrapping: ${Bootstrapper.name}`, this);
 
             await new Bootstrapper().bootstrap(this);
 
-            this.events.dispatch("bootstrapped", Bootstrapper);
+            this.events.dispatch(`bootstrapped: ${Bootstrapper.name}`, this);
         }
     }
 
