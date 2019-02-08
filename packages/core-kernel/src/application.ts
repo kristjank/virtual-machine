@@ -13,20 +13,9 @@ import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container implements Kernel.IApplication {
     private readonly providers: ProviderRepository = new ProviderRepository(this);
-
-    /**
-     * Indicates if the application has been bootstrapped before.
-     */
     private hasBeenBootstrapped: boolean = false;
-
-    /**
-     * Indicates if the application has "booted".
-     */
     private booted: boolean = false;
 
-    /**
-     * Create a new application instance.
-     */
     public async boot(config: Record<string, any>): Promise<void> {
         this.bindConfiguration(config);
 
@@ -159,6 +148,10 @@ export class Application extends Container implements Kernel.IApplication {
 
     public runningTests(): boolean {
         return this.environment() === "test" || this.network() === "testnet";
+    }
+
+    public isBooted(): boolean {
+        return this.booted;
     }
 
     public isBootstrapped(): boolean {

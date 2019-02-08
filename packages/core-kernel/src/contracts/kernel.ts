@@ -211,6 +211,11 @@ export interface IApplication extends IContainer {
     runningTests(): boolean;
 
     /**
+     * Determine if the application has booted.
+     */
+    isBooted(): boolean;
+
+    /**
      * Determine if the application has been bootstrapped.
      */
     isBootstrapped(): boolean;
