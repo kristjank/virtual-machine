@@ -5,7 +5,7 @@ import * as Bootstrappers from "./bootstrap";
 import { ConfigFactory, ConfigRepository } from "./config";
 import { Container } from "./container";
 import { Blockchain, Kernel, P2P, TransactionPool } from "./contracts";
-import { DirectoryNotFound } from "./errors";
+import { DirectoryNotFound, FailedNetworkDetection } from "./errors";
 import { EventDispatcher } from "./event-dispatcher";
 import { Logger } from "./logger";
 import { ProviderRepository } from "./repositories";
@@ -33,7 +33,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     public async reboot(): Promise<void> {
-        this.terminate();
+        await this.terminate();
 
         await this.registerServiceProviders();
     }
@@ -158,18 +158,10 @@ export class Application extends Container implements Kernel.IApplication {
         return this.hasBeenBootstrapped;
     }
 
-    public configurationIsCached(): boolean {
-        return existsSync(this.getCachedConfigPath());
-    }
-
-    public getCachedConfigPath(): string {
-        return this.cachePath("config");
-    }
-
     public enableMaintenance(): void {
         writeFileSync(this.tempPath("maintenance"), JSON.stringify({ time: +new Date() }));
 
-        this.logger.notice("Application is now in maintenance mode.");
+        this.log.notice("Application is now in maintenance mode.");
 
         this.events.dispatch("kernel.maintenance", true);
     }
@@ -177,7 +169,7 @@ export class Application extends Container implements Kernel.IApplication {
     public disableMaintenance(): void {
         removeSync(this.tempPath("maintenance"));
 
-        this.logger.notice("Application is now live.");
+        this.log.notice("Application is now live.");
 
         this.events.dispatch("kernel.maintenance", false);
     }
@@ -186,14 +178,14 @@ export class Application extends Container implements Kernel.IApplication {
         return existsSync(this.tempPath("maintenance"));
     }
 
-    public terminate(): void {
+    public async terminate(): Promise<void> {
         this.hasBeenBootstrapped = false;
 
-        this.disposeServiceProviders();
+        await this.disposeServiceProviders();
     }
 
-    public get logger(): Kernel.ILogger {
-        return this.resolve<Kernel.ILogger>("logger");
+    public get log(): Kernel.ILogger {
+        return this.resolve<Kernel.ILogger>("log");
     }
 
     public get blockchain(): Blockchain.IBlockchain {
@@ -229,7 +221,7 @@ export class Application extends Container implements Kernel.IApplication {
         const network = this.network();
 
         if (!token || !network) {
-            throw new Error("Unable to detect application token or network.");
+            throw new FailedNetworkDetection();
         }
 
         this.bind("app.namespace", `${token}-${network}`);

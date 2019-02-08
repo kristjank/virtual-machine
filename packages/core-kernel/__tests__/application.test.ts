@@ -1,7 +1,9 @@
 import "jest-extended";
 
+import { ensureDirSync, removeSync } from "fs-extra";
 import { resolve } from "path";
 import { Kernel } from "../src/contracts";
+import { DirectoryNotFound, EntryDoesNotExist, FailedNetworkDetection } from "../src/errors";
 import { createApp } from "./__support__";
 
 const config = {
@@ -18,6 +20,14 @@ const config = {
     },
 };
 
+function createTempDir(method: string) {
+    ensureDirSync("tmp");
+
+    app[method]("tmp");
+
+    removeSync("tmp");
+}
+
 let app: Kernel.IApplication;
 beforeEach(async () => {
     app = await createApp();
@@ -25,7 +35,40 @@ beforeEach(async () => {
 
 describe("Application", () => {
     it("should be booted", () => {
+        expect(app.isBooted()).toBeTrue();
         expect(app.isBootstrapped()).toBeTrue();
+    });
+
+    it("should terminate the application", async () => {
+        await app.terminate();
+
+        expect(app.isBootstrapped()).toBeFalse();
+    });
+
+    it("should throw an error if the blockchain is not available", async () => {
+        expect(() => app.blockchain).toThrow(EntryDoesNotExist);
+    });
+
+    it("should throw an error if the p2p is not available", async () => {
+        expect(() => app.p2p).toThrow(EntryDoesNotExist);
+    });
+
+    it("should throw an error if the transactionPool is not available", async () => {
+        expect(() => app.transactionPool).toThrow(EntryDoesNotExist);
+    });
+
+    it("should throw an error if the token is missing", async () => {
+        const dummyConfig = { ...config };
+        delete dummyConfig.token;
+
+        await expect(createApp(dummyConfig)).rejects.toThrow(FailedNetworkDetection);
+    });
+
+    it("should throw an error if the network is missing", async () => {
+        const dummyConfig = { ...config };
+        delete dummyConfig.network;
+
+        await expect(createApp(dummyConfig)).rejects.toThrow(FailedNetworkDetection);
     });
 
     it("config", () => {
@@ -40,54 +83,126 @@ describe("Application", () => {
         expect(app.version()).toBeString();
     });
 
-    it("dataPath", () => {
-        expect(app.dataPath()).toBe(config.paths.data);
+    describe("dataPath", () => {
+        it("should return a valid path", () => {
+            expect(app.dataPath()).toBe(config.paths.data);
+        });
+
+        it("should throw an error if the requested path does not exist", () => {
+            createTempDir("useDataPath");
+
+            expect(() => app.dataPath()).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("useDataPath", () => {
-        app.useDataPath(config.paths.data);
+    describe("useDataPath", () => {
+        it("should use the given path", () => {
+            app.useDataPath(config.paths.data);
 
-        expect(app.dataPath()).toBe(config.paths.data);
+            expect(app.dataPath()).toBe(config.paths.data);
+        });
+
+        it("should throw an error if the given path does not exist", () => {
+            expect(() => app.useDataPath("fake")).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("configPath", () => {
-        expect(app.configPath()).toBe(config.paths.config);
+    describe("configPath", () => {
+        it("should return a valid path", () => {
+            expect(app.configPath()).toBe(config.paths.config);
+        });
+
+        it("should throw an error if the requested path does not exist", () => {
+            createTempDir("useConfigPath");
+
+            expect(() => app.configPath()).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("useConfigPath", () => {
-        app.useConfigPath(config.paths.config);
+    describe("useConfigPath", () => {
+        it("should use the given path", () => {
+            app.useConfigPath(config.paths.config);
 
-        expect(app.configPath()).toBe(config.paths.config);
+            expect(app.configPath()).toBe(config.paths.config);
+        });
+
+        it("should throw an error if the given path does not exist", () => {
+            expect(() => app.useConfigPath("fake")).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("cachePath", () => {
-        expect(app.cachePath()).toBe(config.paths.cache);
+    describe("cachePath", () => {
+        it("should return a valid path", () => {
+            expect(app.cachePath()).toBe(config.paths.cache);
+        });
+
+        it("should throw an error if the requested path does not exist", () => {
+            createTempDir("useCachePath");
+
+            expect(() => app.cachePath()).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("useCachePath", () => {
-        app.useCachePath(config.paths.cache);
+    describe("useCachePath", () => {
+        it("should use the given path", () => {
+            app.useCachePath(config.paths.cache);
 
-        expect(app.cachePath()).toBe(config.paths.cache);
+            expect(app.cachePath()).toBe(config.paths.cache);
+        });
+
+        it("should throw an error if the given path does not exist", () => {
+            expect(() => app.useCachePath("fake")).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("logPath", () => {
-        expect(app.logPath()).toBe(config.paths.log);
+    describe("logPath", () => {
+        it("should return a valid path", () => {
+            expect(app.logPath()).toBe(config.paths.log);
+        });
+
+        it("should throw an error if the requested path does not exist", () => {
+            createTempDir("useLogPath");
+
+            expect(() => app.logPath()).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("useLogPath", () => {
-        app.useLogPath(config.paths.log);
+    describe("useLogPath", () => {
+        it("should use the given path", () => {
+            app.useLogPath(config.paths.log);
 
-        expect(app.logPath()).toBe(config.paths.log);
+            expect(app.logPath()).toBe(config.paths.log);
+        });
+
+        it("should throw an error if the given path does not exist", () => {
+            createTempDir("useLogPath");
+
+            expect(() => app.useLogPath("fake")).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("tempPath", () => {
-        expect(app.tempPath()).toBe(config.paths.temp);
+    describe("tempPath", () => {
+        it("should return a valid path", () => {
+            expect(app.tempPath()).toBe(config.paths.temp);
+        });
+
+        it("should throw an error if the requested path does not exist", () => {
+            createTempDir("useTempPath");
+
+            expect(() => app.tempPath()).toThrow(DirectoryNotFound);
+        });
     });
 
-    it("useTempPath", () => {
-        app.useTempPath(config.paths.temp);
+    describe("useTempPath", () => {
+        it("should use the given path", () => {
+            app.useTempPath(config.paths.temp);
 
-        expect(app.tempPath()).toBe(config.paths.temp);
+            expect(app.tempPath()).toBe(config.paths.temp);
+        });
+
+        it("should throw an error if the given path does not exist", () => {
+            expect(() => app.useTempPath("fake")).toThrow(DirectoryNotFound);
+        });
     });
 
     describe("isProduction", () => {
@@ -166,5 +281,15 @@ describe("Application", () => {
 
             expect(app.runningTests()).toBeFalse();
         });
+    });
+
+    it("should go in and out of maintenance mode", () => {
+        app.enableMaintenance();
+
+        expect(app.isDownForMaintenance()).toBeTrue();
+
+        app.disableMaintenance();
+
+        expect(app.isDownForMaintenance()).toBeFalse();
     });
 });

@@ -2,8 +2,8 @@ import { resolve } from "path";
 import { Application } from "../../src/application";
 import { Kernel } from "../../src/contracts";
 
-export async function createApp(): Promise<Kernel.IApplication> {
-    const config = {
+export async function createApp(config?: Record<string, any>): Promise<Kernel.IApplication> {
+    const defaults = {
         env: "unitnet",
         version: "2.1.0",
         token: "ark",
@@ -16,6 +16,10 @@ export async function createApp(): Promise<Kernel.IApplication> {
             temp: resolve(__dirname, "../__fixtures__/temp"),
         },
     };
+
+    if (!config) {
+        config = defaults;
+    }
 
     const app: Kernel.IApplication = new Application();
     await app.boot(config);

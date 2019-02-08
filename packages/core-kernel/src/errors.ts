@@ -79,3 +79,9 @@ export class InvalidConfigurationAdapter extends KernelError {
         super("Unable to load the environment file.");
     }
 }
+
+export class FailedNetworkDetection extends KernelError {
+    constructor() {
+        super("Unable to detect application token or network.");
+    }
+}

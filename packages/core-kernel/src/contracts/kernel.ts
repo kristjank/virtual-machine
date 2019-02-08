@@ -43,7 +43,7 @@ export interface IApplication extends IContainer {
     /**
      * Get an instance of the application logger.
      */
-    readonly logger: ILogger;
+    readonly log: ILogger;
 
     /**
      * Get an instance of the application blockchain.
@@ -221,16 +221,6 @@ export interface IApplication extends IContainer {
     isBootstrapped(): boolean;
 
     /**
-     * Determine if the application configuration is cached.
-     */
-    configurationIsCached(): boolean;
-
-    /**
-     * Get the path to the configuration cache file.
-     */
-    getCachedConfigPath(): string;
-
-    /**
      * Put the application into maintenance mode.
      */
     enableMaintenance(): void;
@@ -248,7 +238,7 @@ export interface IApplication extends IContainer {
     /**
      * Terminate the application.
      */
-    terminate(): void;
+    terminate(): Promise<void>;
 }
 
 /**

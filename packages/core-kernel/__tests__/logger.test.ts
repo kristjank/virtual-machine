@@ -23,15 +23,51 @@ beforeEach(async () => {
 
 describe("Logger", () => {
     describe.each(["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"])(
-        "should log message with the level - %s",
+        "%s",
         (level: string) => {
-            test("matches level and message ", async () => {
+            it("should match the level and message", async () => {
                 const expectedMessage = `${level}_message`;
                 logger[level](expectedMessage);
 
                 expect(message).toInclude(level);
                 expect(message).toInclude(expectedMessage);
                 message = null;
+            });
+
+            it("should not log if the message is NULL", async () => {
+                logger[level](null);
+
+                expect(message).toBeNull();
+            });
+
+            it("should not log if the message is {}", async () => {
+                logger[level]({});
+
+                expect(message).toBeNull();
+            });
+
+            it("should not log if the message is []", async () => {
+                logger[level]([]);
+
+                expect(message).toBeNull();
+            });
+
+            it("should not log if the message is an empty string", async () => {
+                logger[level]("");
+
+                expect(message).toBeNull();
+            });
+
+            it("should turn objects into strings", async () => {
+                logger[level]({ key: "value" });
+
+                expect(message).toInclude("{ key: 'value' }");
+            });
+
+            it("should turn arrays into strings", async () => {
+                logger[level](["key"]);
+
+                expect(message).toInclude("[ 'key' ]");
             });
         },
     );

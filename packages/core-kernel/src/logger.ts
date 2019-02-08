@@ -2,6 +2,7 @@ import chalk from "chalk";
 import "colors";
 import dayjs from "dayjs-ext";
 import isEmpty from "lodash/isEmpty";
+import isString from "lodash/isString";
 import { inspect } from "util";
 import * as winston from "winston";
 import "winston-daily-rotate-file";
@@ -75,7 +76,7 @@ export class Logger implements Kernel.ILogger {
             return;
         }
 
-        if (typeof message !== "string") {
+        if (!isString(message)) {
             message = inspect(message, { depth: 1 });
         }
 
@@ -88,14 +89,6 @@ export class Logger implements Kernel.ILogger {
         if (consoleTransport) {
             consoleTransport.silent = suppress;
         }
-    }
-
-    public addTransport(transport: any): void {
-        this.logger.add(transport);
-    }
-
-    public removeTransport(transport: any): void {
-        this.logger.remove(transport);
     }
 
     private registerTransports(): void {

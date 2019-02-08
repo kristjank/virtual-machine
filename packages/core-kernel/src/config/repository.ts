@@ -9,6 +9,10 @@ export class ConfigRepository {
         }
     }
 
+    public all(): IterableIterator<[string, any]> {
+        return this.repository.entries();
+    }
+
     public get(key: string): any {
         return this.repository.get(key);
     }

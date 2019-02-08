@@ -40,6 +40,22 @@ describe("Container", () => {
 
     describe("bind", () => {
         it("should be bound if it is a class", () => {
+            container.bind("ping", "pong");
+
+            container.bind("key", DummyClass);
+
+            expect(container.resolve("key")).toEqual({ ping: "pong" });
+        });
+
+        it("should be bound if it is a function", () => {
+            container.bind("ping", "pong");
+
+            container.bind("key", dummyFunction);
+
+            expect(container.resolve("key")).toBe("pong");
+        });
+
+        it("should be bound if it is a value", () => {
             container.bind("key", "value");
 
             expect(container.resolve("key")).toBe("value");
