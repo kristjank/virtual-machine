@@ -4,17 +4,18 @@ import { join } from "path";
 import * as Bootstrappers from "./bootstrap";
 import { ConfigFactory, ConfigRepository } from "./config";
 import { Container } from "./container";
-import { Blockchain, EventEmitter, Kernel, P2P, TransactionPool } from "./contracts";
+import { Blockchain, Kernel, P2P, TransactionPool } from "./contracts";
 import { DirectoryNotFound } from "./errors";
 import { EventDispatcher } from "./event-dispatcher";
 import { Logger } from "./logger";
+import { ProviderRepository } from "./repositories";
 import { AbstractServiceProvider } from "./support";
 
 export class Application extends Container implements Kernel.IApplication {
     /**
      * Holds the providers that have been registered.
      */
-    public readonly providers: Set<AbstractServiceProvider> = new Set<AbstractServiceProvider>();
+    protected readonly providers: ProviderRepository = new ProviderRepository(this);
 
     /**
      * Indicates if the application has been bootstrapped.
@@ -26,11 +27,11 @@ export class Application extends Container implements Kernel.IApplication {
 
         this.bindPathsInContainer();
 
+        this.registerCoreServices();
+
         this.registerBindings();
 
         this.registerNamespace();
-
-        this.registerCoreServices();
 
         this.registerServiceProviders();
 
@@ -45,6 +46,14 @@ export class Application extends Container implements Kernel.IApplication {
         this.terminate();
 
         this.registerServiceProviders();
+    }
+
+    public registerProvider(provider: AbstractServiceProvider): void {
+        this.providers.register(provider);
+    }
+
+    public makeProvider(provider: AbstractServiceProvider, opts: Record<string, any>): AbstractServiceProvider {
+        return this.providers.make(provider, opts);
     }
 
     public config<T = any>(key: string, value?: T): T {
@@ -155,12 +164,16 @@ export class Application extends Container implements Kernel.IApplication {
         writeFileSync(this.tempPath("maintenance"), JSON.stringify({ time: +new Date() }));
 
         this.logger.notice("Application is now in maintenance mode.");
+
+        this.events.dispatch("kernel.maintenance", true);
     }
 
     public disableMaintenance(): void {
         removeSync(this.tempPath("maintenance"));
 
         this.logger.notice("Application is now live.");
+
+        this.events.dispatch("kernel.maintenance", false);
     }
 
     public isDownForMaintenance(): boolean {
@@ -189,7 +202,7 @@ export class Application extends Container implements Kernel.IApplication {
         return this.resolve<TransactionPool.ITransactionPool>("transactionPool");
     }
 
-    public get emitter(): Kernel.IEventDispatcher {
+    public get events(): Kernel.IEventDispatcher {
         return this.resolve<Kernel.IEventDispatcher>("events");
     }
 
@@ -200,11 +213,8 @@ export class Application extends Container implements Kernel.IApplication {
 
     private registerBindings(): void {
         this.bind("app.env", this.config("env"));
-
         this.bind("app.token", this.config("token"));
-
         this.bind("app.network", this.config("network"));
-
         this.bind("app.version", this.config("version"));
     }
 
@@ -222,18 +232,21 @@ export class Application extends Container implements Kernel.IApplication {
 
     private registerCoreServices(): void {
         this.bind("events", new EventDispatcher());
-
         this.bind("log", new Logger(this));
     }
 
     private async registerServiceProviders(): Promise<void> {
         for (const Bootstrapper of Object.values(Bootstrappers)) {
+            this.events.dispatch("bootstrapping", Bootstrapper);
+
             await new Bootstrapper().bootstrap(this);
+
+            this.events.dispatch("bootstrapped", Bootstrapper);
         }
     }
 
     private async disposeServiceProviders(): Promise<void> {
-        for (const provider of this.providers.values()) {
+        for (const provider of this.providers.all()) {
             await provider.dispose();
         }
     }

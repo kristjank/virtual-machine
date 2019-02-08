@@ -9,13 +9,10 @@ export class RegisterProviders {
         for (const [pkg, opts] of Object.entries(providers)) {
             const { ServiceProvider } = require(pkg);
 
-            const serviceProvider = new ServiceProvider(app, opts);
+            const serviceProvider: AbstractServiceProvider = app.makeProvider(ServiceProvider, opts);
 
             if (this.satisfiesDependencies(app, serviceProvider)) {
-                await serviceProvider.register();
-
-                // @TODO: add getter/setter for providers
-                app.providers.add(serviceProvider);
+                await app.registerProvider(serviceProvider);
             }
         }
     }

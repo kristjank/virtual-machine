@@ -61,9 +61,9 @@ export interface IApplication extends IContainer {
     readonly transactionPool: ITransactionPool;
 
     /**
-     * Get an instance of the application emitter.
+     * Get an instance of the application event dispatcher.
      */
-    readonly emitter: IEventDispatcher;
+    readonly events: IEventDispatcher;
 
     /**
      * Boot the application's service providers.
@@ -79,6 +79,16 @@ export interface IApplication extends IContainer {
      * Reboot the application.
      */
     reboot(): void;
+
+    /**
+     * Register the application service provider.
+     */
+    registerProvider(provider: AbstractServiceProvider): void;
+
+    /**
+     * Create a new provider instance.
+     */
+    makeProvider(provider: AbstractServiceProvider, opts: Record<string, any>): AbstractServiceProvider;
 
     /**
      * Get or set the specified configuration value.
