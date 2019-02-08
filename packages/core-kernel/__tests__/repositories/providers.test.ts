@@ -15,17 +15,13 @@ beforeEach(async () => {
 });
 
 describe("ProviderRepository", () => {
-    test("all", () => {
-        expect(repository.all()).toBeInstanceOf(Set);
-    });
-
     test("register", async () => {
-        expect(repository.all().size).toBe(0);
+        expect(repository.size).toBe(0);
 
         // @ts-ignore
         await repository.register(repository.make(ServiceProvider, {}));
 
-        expect(repository.all().size).toBe(1);
+        expect(repository.size).toBe(1);
     });
 
     test("make", () => {

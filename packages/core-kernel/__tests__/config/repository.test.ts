@@ -13,10 +13,6 @@ beforeEach(async () => {
 });
 
 describe("ConfigRepository", () => {
-    it("should return an iterator with all configuration", () => {
-        expect(repository.all()).toHaveLength(1);
-    });
-
     it("should set and get a value", () => {
         repository.set("key", "value");
 
@@ -27,6 +23,16 @@ describe("ConfigRepository", () => {
         repository.set("key", "value");
 
         expect(repository.has("key")).toBeTrue();
+    });
+
+    it("should forget a value", () => {
+        repository.set("key", "value");
+
+        expect(repository.has("key")).toBeTrue();
+
+        repository.delete("key");
+
+        expect(repository.has("key")).toBeFalse();
     });
 
     it("should return true if a key does not exists", () => {

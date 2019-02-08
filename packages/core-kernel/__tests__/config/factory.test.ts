@@ -13,6 +13,6 @@ beforeEach(async () => {
 
 describe("ConfigFactory", () => {
     it("should should throw if an invalid adapter is request", () => {
-        expect(ConfigFactory.make(app, "fake")).toThrow(InvalidConfigurationAdapter);
+        expect(() => ConfigFactory.make(app, "fake")).toThrow(InvalidConfigurationAdapter);
     });
 });

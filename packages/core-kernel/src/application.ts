@@ -39,7 +39,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     public getProviders(): Set<AbstractServiceProvider> {
-        return this.providers.all();
+        return this.providers;
     }
 
     public async registerProvider(provider: AbstractServiceProvider): Promise<void> {
