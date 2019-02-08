@@ -4,6 +4,7 @@ import { ensureDirSync, removeSync } from "fs-extra";
 import { resolve } from "path";
 import { Kernel } from "../src/contracts";
 import { DirectoryNotFound, EntryDoesNotExist, FailedNetworkDetection } from "../src/errors";
+import { ServiceProvider } from "./__stubs__/service-provider";
 import { createApp } from "./__support__";
 
 const config = {
@@ -37,12 +38,6 @@ describe("Application", () => {
     it("should be booted", () => {
         expect(app.isBooted()).toBeTrue();
         expect(app.isBootstrapped()).toBeTrue();
-    });
-
-    it("should terminate the application", async () => {
-        await app.terminate();
-
-        expect(app.isBootstrapped()).toBeFalse();
     });
 
     it("should throw an error if the blockchain is not available", async () => {
@@ -291,5 +286,68 @@ describe("Application", () => {
         app.disableMaintenance();
 
         expect(app.isDownForMaintenance()).toBeFalse();
+    });
+
+    it("should have a listener for when after the environment is loaded", () => {
+        expect(app.events.count()).toBe(0);
+
+        app.afterLoadingEnvironment(() => "Hello World");
+
+        expect(app.events.count()).toBe(1);
+    });
+
+    it("should have a listener before TEST is getting bootstrapped", () => {
+        expect(app.events.count()).toBe(0);
+
+        app.beforeBootstrapping("TEST", () => "Hello World");
+
+        expect(app.events.count()).toBe(1);
+    });
+
+    it("should have a listener after TEST is getting bootstrapped", () => {
+        expect(app.events.count()).toBe(0);
+
+        app.afterBootstrapping("TEST", () => "Hello World");
+
+        expect(app.events.count()).toBe(1);
+    });
+
+    it("should make and register a new provider", async () => {
+        expect(app.getProviders().size).toBe(0);
+
+        // @ts-ignore
+        await app.registerProvider(app.makeProvider(ServiceProvider, {}));
+
+        expect(app.getProviders().size).toBe(1);
+    });
+
+    it("should reboot the application", async () => {
+        const spyTerminate = jest.spyOn(app, "terminate");
+
+        await app.reboot();
+
+        expect(spyTerminate).toHaveBeenCalled();
+
+        jest.restoreAllMocks();
+    });
+
+    it("should terminate the application and dipose all providers", async () => {
+        // @ts-ignore
+        const provider = app.makeProvider(ServiceProvider, {});
+        await app.registerProvider(provider);
+
+        const spyTerminate = jest.spyOn(app, "terminate");
+        const spyProviders = jest.spyOn(app, "getProviders");
+        const spyDispose = jest.spyOn(provider, "dispose");
+
+        await app.terminate();
+
+        expect(spyTerminate).toHaveBeenCalled();
+        expect(spyProviders).toHaveBeenCalled();
+        expect(spyDispose).toHaveBeenCalled();
+
+        expect(app.isBootstrapped()).toBeFalse();
+
+        jest.restoreAllMocks();
     });
 });

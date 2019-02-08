@@ -16,18 +16,20 @@ beforeEach(async () => {
 
 describe("ProviderRepository", () => {
     test("all", () => {
-        expect(repository.all()).toBeObject();
+        expect(repository.all()).toBeInstanceOf(Set);
     });
 
     test("register", async () => {
-        expect(repository.count()).toBe(0);
+        expect(repository.all().size).toBe(0);
 
+        // @ts-ignore
         await repository.register(repository.make(ServiceProvider, {}));
 
-        expect(repository.count()).toBe(1);
+        expect(repository.all().size).toBe(1);
     });
 
     test("make", () => {
+        // @ts-ignore
         expect(repository.make(ServiceProvider, {})).toBeInstanceOf(AbstractServiceProvider);
     });
 });

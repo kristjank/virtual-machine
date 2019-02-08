@@ -38,6 +38,10 @@ export class Application extends Container implements Kernel.IApplication {
         await this.registerServiceProviders();
     }
 
+    public getProviders(): Set<AbstractServiceProvider> {
+        return this.providers.all();
+    }
+
     public async registerProvider(provider: AbstractServiceProvider): Promise<void> {
         await this.providers.register(provider);
     }
@@ -246,7 +250,7 @@ export class Application extends Container implements Kernel.IApplication {
     }
 
     private async disposeServiceProviders(): Promise<void> {
-        for (const provider of this.providers.all()) {
+        for (const provider of this.getProviders()) {
             await provider.dispose();
         }
     }

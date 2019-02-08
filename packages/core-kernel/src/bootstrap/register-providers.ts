@@ -1,5 +1,6 @@
 import semver from "semver";
 import { Kernel } from "../contracts";
+import { FailedDependencySatisfaction, FailedServiceProviderRegistration } from "../errors";
 import { AbstractServiceProvider } from "../support/service-provider";
 
 export class RegisterProviders {
@@ -26,14 +27,14 @@ export class RegisterProviders {
 
         for (const [dep, version] of Object.entries(dependencies)) {
             if (!app.has(dep)) {
-                throw new Error(`Failed to register "${serviceProvider.getName()}" as we did not detect "${dep}".`);
+                throw new FailedServiceProviderRegistration(serviceProvider.getName(), dep);
             }
 
             // @ts-ignore
             const constraint = app.resolve(dep).getVersion();
 
             if (semver.satisfies(constraint, version)) {
-                throw new Error(`Expected "${dep}" to satisfy "${constraint}" but received "${version}".`);
+                throw new FailedDependencySatisfaction(dep, constraint, version);
             }
         }
 

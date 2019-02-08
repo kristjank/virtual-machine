@@ -76,6 +76,11 @@ export interface IApplication extends IContainer {
     reboot(): void;
 
     /**
+     * Get the registered service provider instances if any exist.
+     */
+    getProviders(): Set<AbstractServiceProvider>;
+
+    /**
      * Register the application service provider.
      */
     registerProvider(provider: AbstractServiceProvider): Promise<void>;
@@ -332,4 +337,9 @@ export interface IEventDispatcher {
      * Get all of the listeners for a given event name.
      */
     getListeners(eventName: string): any;
+
+    /**
+     * Get the number of registered events.
+     */
+    count(): number;
 }

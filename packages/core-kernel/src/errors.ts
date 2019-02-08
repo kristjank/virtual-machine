@@ -85,3 +85,15 @@ export class FailedNetworkDetection extends KernelError {
         super("Unable to detect application token or network.");
     }
 }
+
+export class FailedServiceProviderRegistration extends KernelError {
+    constructor(name: string, dep: string) {
+        super(`Failed to register "${name}" as we did not detect "${dep}".`);
+    }
+}
+
+export class FailedDependencySatisfaction extends KernelError {
+    constructor(dep: string, expected: string, given: string) {
+        super(`Expected "${dep}" to satisfy "${expected}" but received "${given}".`);
+    }
+}

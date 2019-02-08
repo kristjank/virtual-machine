@@ -41,4 +41,8 @@ export class EventDispatcher implements Kernel.IEventDispatcher {
     public getListeners(eventName: string): any[] {
         return this.dispatcher.listeners(eventName);
     }
+
+    public count(): number {
+        return this.dispatcher.eventNames().length;
+    }
 }
