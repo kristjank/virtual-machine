@@ -25,6 +25,10 @@ export class LocalAdapter extends BaseAdapter {
     }
 
     public async loadEnvironmentVariables(): Promise<void> {
+        if (this.app.runningTests()) {
+            return;
+        }
+
         try {
             const config = parseFileSync(this.app.environmentFile());
 
