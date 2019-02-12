@@ -51,6 +51,7 @@
         "hoek": "^6.1.2",
         "joi": "^14.3.0",
         "js-yaml": "^3.12.1",
+        "keyv": "^3.1.0",
         "lodash.get": "^4.4.2",
         "lodash.isempty": "^4.4.0",
         "lodash.isstring": "^4.0.1",
