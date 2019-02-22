@@ -160,8 +160,8 @@ export const plugin = {
                                         // @ts-ignore
                                         if (error.params.additionalProperty) {
                                             report.title = "Invalid Query Parameter";
-                                            // @ts-ignore
                                             report.detail = `The endpoint does not have a '${
+                                                // @ts-ignore
                                                 error.params.additionalProperty
                                             }' query parameter.`;
                                         }

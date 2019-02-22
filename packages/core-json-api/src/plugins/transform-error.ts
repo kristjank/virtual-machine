@@ -36,9 +36,9 @@ export const plugin = {
 
                     // @ts-ignore
                     if (response.data && output.statusCode === 500) {
-                        // @ts-ignore
                         request.log(
                             "error",
+                            // @ts-ignore
                             response.data instanceof Buffer ? response.data.toString() : response.data,
                         );
                     }
