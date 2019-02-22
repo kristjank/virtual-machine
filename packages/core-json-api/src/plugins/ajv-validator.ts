@@ -122,7 +122,6 @@ export const plugin = {
             $data: true,
             schemas,
             coerceTypes: true,
-            removeAdditional: true,
             extendRefs: true,
             allErrors: true,
         });
@@ -139,17 +138,29 @@ export const plugin = {
                 const config = request.route.settings.plugins.validator || {};
 
                 for (const type of ["headers", "params", "query"]) {
-                    if (config[type] && !ajv.validate(config[type], request[type])) {
-                        return h
-                            .response({
-                                errors: ajv.errors.map(error => ({
-                                    status: 422,
-                                    source: { parameter: error.dataPath, pointer: error.schemaPath },
-                                    title: error.keyword,
-                                    detail: error.message,
-                                })),
-                            })
-                            .takeover();
+                    if (config[type]) {
+                        config[type].additionalProperties = false;
+
+                        if (!ajv.validate(config[type], request[type])) {
+                            return h
+                                .response({
+                                    errors: ajv.errors.map(error => {
+                                        const source: Record<string, string> = { pointer: error.schemaPath };
+
+                                        if (error.dataPath) {
+                                            source.parameter = error.dataPath;
+                                        }
+
+                                        return {
+                                            status: 422,
+                                            source,
+                                            title: error.keyword,
+                                            detail: error.message,
+                                        };
+                                    }),
+                                })
+                                .takeover();
+                        }
                     }
                 }
 
