@@ -7,7 +7,9 @@ export const plugin = {
             type: "onPreHandler",
             async method(request: IRequest, h: IResponse) {
                 if (request.headers.accept.indexOf("application/vnd.api+json") === -1) {
-                    throw unsupportedMediaType();
+                    throw unsupportedMediaType(
+                        'JSON:API requires use of the "application/vnd.api+json" media type for exchanging data',
+                    );
                 }
 
                 return h.continue;

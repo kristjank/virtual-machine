@@ -9,7 +9,7 @@ export function register(server: IServer): void {
         handler: handlers.index,
         options: {
             plugins: {
-                "hapi-ajv": schemas.index,
+                validator: schemas.index,
             },
         },
     });
@@ -20,7 +20,7 @@ export function register(server: IServer): void {
         handler: handlers.store,
         options: {
             plugins: {
-                "hapi-ajv": schemas.store,
+                validator: schemas.store,
             },
         },
     });
@@ -31,7 +31,7 @@ export function register(server: IServer): void {
         handler: handlers.show,
         options: {
             plugins: {
-                "hapi-ajv": schemas.show,
+                validator: schemas.show,
             },
         },
     });
@@ -42,7 +42,7 @@ export function register(server: IServer): void {
         handler: handlers.unconfirmed,
         options: {
             plugins: {
-                "hapi-ajv": schemas.unconfirmed,
+                validator: schemas.unconfirmed,
             },
         },
     });
@@ -53,7 +53,7 @@ export function register(server: IServer): void {
         handler: handlers.showUnconfirmed,
         options: {
             plugins: {
-                "hapi-ajv": schemas.showUnconfirmed,
+                validator: schemas.showUnconfirmed,
             },
         },
     });

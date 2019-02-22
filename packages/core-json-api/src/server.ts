@@ -53,9 +53,9 @@ export class Server {
     }
 
     private async mountServer(name: string, server: IServer): Promise<void> {
-        // await server.register({
-        //     plugin: require("./plugins/enforce-content-type"),
-        // });
+        await server.register({
+            plugin: require("./plugins/enforce-content-type"),
+        });
 
         await server.register({
             plugin: require("./plugins/parse-query-string"),

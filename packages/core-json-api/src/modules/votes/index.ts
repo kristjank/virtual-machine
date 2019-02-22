@@ -9,7 +9,7 @@ export function register(server: IServer): void {
         handler: handlers.index,
         options: {
             plugins: {
-                "hapi-ajv": schemas.index,
+                validator: schemas.index,
             },
         },
     });
@@ -20,7 +20,7 @@ export function register(server: IServer): void {
         handler: handlers.show,
         options: {
             plugins: {
-                "hapi-ajv": schemas.show,
+                validator: schemas.show,
             },
         },
     });

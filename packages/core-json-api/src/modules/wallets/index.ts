@@ -9,7 +9,7 @@ export function register(server: IServer): void {
         handler: handlers.index,
         options: {
             plugins: {
-                "hapi-ajv": schemas.index,
+                validator: schemas.index,
             },
         },
     });
@@ -20,7 +20,7 @@ export function register(server: IServer): void {
         handler: handlers.top,
         options: {
             plugins: {
-                "hapi-ajv": schemas.index,
+                validator: schemas.index,
             },
         },
     });
@@ -31,7 +31,7 @@ export function register(server: IServer): void {
         handler: handlers.show,
         options: {
             plugins: {
-                "hapi-ajv": schemas.show,
+                validator: schemas.show,
             },
         },
     });
@@ -42,7 +42,7 @@ export function register(server: IServer): void {
         handler: handlers.transactions,
         options: {
             plugins: {
-                "hapi-ajv": schemas.transactions,
+                validator: schemas.transactions,
             },
         },
     });
@@ -53,7 +53,7 @@ export function register(server: IServer): void {
         handler: handlers.transactionsSent,
         options: {
             plugins: {
-                "hapi-ajv": schemas.transactionsSent,
+                validator: schemas.transactionsSent,
             },
         },
     });
@@ -64,7 +64,7 @@ export function register(server: IServer): void {
         handler: handlers.transactionsReceived,
         options: {
             plugins: {
-                "hapi-ajv": schemas.transactionsReceived,
+                validator: schemas.transactionsReceived,
             },
         },
     });
@@ -75,7 +75,7 @@ export function register(server: IServer): void {
         handler: handlers.votes,
         options: {
             plugins: {
-                "hapi-ajv": schemas.votes,
+                validator: schemas.votes,
             },
         },
     });

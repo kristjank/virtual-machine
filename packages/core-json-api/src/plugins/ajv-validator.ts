@@ -3,8 +3,6 @@ import { badData } from "boom";
 import Hapi from "hapi";
 import { isValid } from "ipaddr.js";
 
-const PLUGIN_NAME = "hapi-ajv";
-
 export const schemas = {
     hex: {
         $id: "hex",
@@ -111,7 +109,7 @@ export const schemas = {
     },
 
     port: {
-        $id: "blockHeight",
+        $id: "port",
         type: "integer",
         minimum: 1,
         maximum: 65535,
@@ -137,7 +135,8 @@ export const plugin = {
         server.ext({
             type: "onPreHandler",
             method: (request, h) => {
-                const config = request.route.settings.plugins[PLUGIN_NAME] || {};
+                // @ts-ignore
+                const config = request.route.settings.plugins.validator || {};
 
                 for (const type of ["headers", "params", "query"]) {
                     if (config[type] && !ajv.validate(config[type], request[type])) {
@@ -158,6 +157,6 @@ export const plugin = {
             },
         });
     },
-    name: PLUGIN_NAME,
+    name: "validator",
     version: "1.0.0",
 };
