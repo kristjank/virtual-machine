@@ -2,43 +2,43 @@ import { pagination } from "../shared/schemas";
 
 export const index: object = {
     query: {
-        ...pagination,
-        ...{
-            orderBy: {
-                type: "string",
-            },
-            id: {
-                type: "transactionId",
-            },
-            blockId: {
-                type: "blockId",
-            },
-            version: {
-                type: "integer",
-            },
-            senderPublicKey: {
-                type: "publicKey",
-            },
-            senderId: {
-                type: "address",
-            },
-            recipientId: {
-                type: "address",
-            },
-            timestamp: {
-                type: "integer",
-                minimum: 0,
-            },
-            amount: {
-                type: "integer",
-                minimum: 0,
-            },
-            fee: {
-                type: "integer",
-                minimum: 0,
-            },
-            vendorFieldHex: {
-                type: "hex",
+        type: "object",
+        properties: {
+            ...pagination,
+            ...{
+                orderBy: {
+                    type: "string",
+                },
+                id: {
+                    $ref: "transactionId",
+                },
+                blockId: {
+                    $ref: "blockId",
+                },
+                version: {
+                    type: "integer",
+                },
+                senderPublicKey: {
+                    $ref: "publicKey",
+                },
+                senderId: {
+                    $ref: "address",
+                },
+                recipientId: {
+                    $ref: "address",
+                },
+                timestamp: {
+                    $ref: "timestamp",
+                },
+                amount: {
+                    $ref: "satoshi",
+                },
+                fee: {
+                    $ref: "satoshi",
+                },
+                vendorFieldHex: {
+                    $ref: "hex",
+                },
             },
         },
     },
@@ -46,8 +46,11 @@ export const index: object = {
 
 export const show: object = {
     params: {
-        id: {
-            type: "transactionId",
+        type: "object",
+        properties: {
+            id: {
+                $ref: "transactionId",
+            },
         },
     },
 };

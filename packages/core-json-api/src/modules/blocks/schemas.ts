@@ -2,55 +2,52 @@ import { pagination } from "../shared/schemas";
 
 export const index: object = {
     query: {
-        ...pagination,
-        ...{
-            orderBy: {
-                type: "string",
-            },
-            id: {
-                type: "integer",
-            },
-            version: {
-                type: "integer",
-                minimum: 0,
-            },
-            timestamp: {
-                type: "integer",
-                minimum: 0,
-            },
-            previousBlock: {
-                type: "integer",
-            },
-            height: {
-                type: "integer",
-            },
-            numberOfTransactions: {
-                type: "integer",
-                minimum: 0,
-            },
-            totalAmount: {
-                type: "integer",
-                minimum: 0,
-            },
-            totalFee: {
-                type: "integer",
-                minimum: 0,
-            },
-            reward: {
-                type: "integer",
-                minimum: 0,
-            },
-            payloadLength: {
-                type: "integer",
-            },
-            payloadHash: {
-                type: "hex",
-            },
-            generatorPublicKey: {
-                type: "publicKey",
-            },
-            blockSignature: {
-                type: "hex",
+        type: "object",
+        properties: {
+            ...pagination,
+            ...{
+                orderBy: {
+                    type: "string",
+                },
+                id: {
+                    $ref: "blockId",
+                },
+                version: {
+                    $ref: "transactionVersion",
+                },
+                timestamp: {
+                    $ref: "timestamp",
+                },
+                previousBlock: {
+                    type: "integer",
+                },
+                height: {
+                    $ref: "blockHeight",
+                },
+                numberOfTransactions: {
+                    $ref: "countable",
+                },
+                totalAmount: {
+                    $ref: "satoshi",
+                },
+                totalFee: {
+                    $ref: "satoshi",
+                },
+                reward: {
+                    $ref: "satoshi",
+                },
+                payloadLength: {
+                    type: "integer",
+                },
+                payloadHash: {
+                    $ref: "hex",
+                },
+                generatorPublicKey: {
+                    $ref: "publicKey",
+                },
+                blockSignature: {
+                    $ref: "hex",
+                },
             },
         },
     },
@@ -58,59 +55,63 @@ export const index: object = {
 
 export const show: object = {
     params: {
-        id: {
-            type: "integer",
+        type: "object",
+        properties: {
+            id: {
+                $ref: "blockId",
+            },
         },
     },
 };
 
 export const transactions: object = {
     params: {
-        type: "string",
+        type: "object",
+        properties: {
+            id: { $ref: "blockId" },
+        },
     },
     query: {
-        ...pagination,
-        ...{
-            orderBy: {
-                type: "string",
-            },
-            id: {
-                type: "publicKey",
-            },
-            blockId: {
-                type: "blockId",
-            },
-            type: {
-                type: "integer",
-                minimum: 0,
-            },
-            version: {
-                type: "integer",
-                minimum: 0,
-            },
-            senderPublicKey: {
-                type: "publicKey",
-            },
-            senderId: {
-                type: "address",
-            },
-            recipientId: {
-                type: "address",
-            },
-            timestamp: {
-                type: "integer",
-                minimum: 0,
-            },
-            amount: {
-                type: "integer",
-                minimum: 0,
-            },
-            fee: {
-                type: "integer",
-                minimum: 0,
-            },
-            vendorFieldHex: {
-                type: "hex",
+        type: "object",
+        properties: {
+            ...pagination,
+            ...{
+                orderBy: {
+                    type: "string",
+                },
+                id: {
+                    $ref: "publicKey",
+                },
+                blockId: {
+                    $ref: "blockId",
+                },
+                type: {
+                    $ref: "transactionType",
+                },
+                version: {
+                    $ref: "transactionVersion",
+                },
+                senderPublicKey: {
+                    $ref: "publicKey",
+                },
+                senderId: {
+                    $ref: "address",
+                },
+                recipientId: {
+                    $ref: "address",
+                },
+                timestamp: {
+                    $ref: "timestamp",
+                },
+                amount: {
+                    $ref: "satoshi",
+                },
+                fee: {
+                    $ref: "satoshi",
+                },
+                vendorFieldHex: {
+                    $ref: "hex",
+                },
             },
         },
     },

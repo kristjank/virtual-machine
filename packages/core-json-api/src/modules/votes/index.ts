@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/votes",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -17,7 +19,9 @@ export function register(server: IServer): void {
         path: "/votes/{id}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 }

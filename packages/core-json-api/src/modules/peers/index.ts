@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/peers",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -23,7 +25,9 @@ export function register(server: IServer): void {
         path: "/peers/{ip}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 }

@@ -2,25 +2,28 @@ import { pagination } from "../shared/schemas";
 
 export const index: object = {
     query: {
-        ...pagination,
-        ...{
-            ip: {
-                type: "ip",
-            },
-            os: {
-                type: "string",
-            },
-            status: {
-                type: "string",
-            },
-            port: {
-                type: "port",
-            },
-            version: {
-                type: "string",
-            },
-            orderBy: {
-                type: "string",
+        type: "object",
+        properties: {
+            ...pagination,
+            ...{
+                ip: {
+                    $ref: "ip",
+                },
+                os: {
+                    type: "string",
+                },
+                status: {
+                    type: "integer",
+                },
+                port: {
+                    $ref: "port",
+                },
+                version: {
+                    type: "string",
+                },
+                orderBy: {
+                    type: "string",
+                },
             },
         },
     },
@@ -28,8 +31,11 @@ export const index: object = {
 
 export const show: object = {
     params: {
-        ip: {
-            type: "ip",
+        type: "object",
+        properties: {
+            ip: {
+                $ref: "ip",
+            },
         },
     },
 };

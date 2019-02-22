@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/blocks",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -17,7 +19,9 @@ export function register(server: IServer): void {
         path: "/blocks/{id}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 
@@ -26,7 +30,9 @@ export function register(server: IServer): void {
         path: "/blocks/{id}/transactions",
         handler: handlers.transactions,
         options: {
-            validate: schemas.transactions,
+            plugins: {
+                "hapi-ajv": schemas.transactions,
+            },
         },
     });
 }

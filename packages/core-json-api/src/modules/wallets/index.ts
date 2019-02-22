@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/wallets",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -17,7 +19,9 @@ export function register(server: IServer): void {
         path: "/wallets/top",
         handler: handlers.top,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -26,7 +30,9 @@ export function register(server: IServer): void {
         path: "/wallets/{id}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 
@@ -35,7 +41,9 @@ export function register(server: IServer): void {
         path: "/wallets/{id}/transactions",
         handler: handlers.transactions,
         options: {
-            validate: schemas.transactions,
+            plugins: {
+                "hapi-ajv": schemas.transactions,
+            },
         },
     });
 
@@ -44,7 +52,9 @@ export function register(server: IServer): void {
         path: "/wallets/{id}/transactions/sent",
         handler: handlers.transactionsSent,
         options: {
-            validate: schemas.transactionsSent,
+            plugins: {
+                "hapi-ajv": schemas.transactionsSent,
+            },
         },
     });
 
@@ -53,7 +63,9 @@ export function register(server: IServer): void {
         path: "/wallets/{id}/transactions/received",
         handler: handlers.transactionsReceived,
         options: {
-            validate: schemas.transactionsReceived,
+            plugins: {
+                "hapi-ajv": schemas.transactionsReceived,
+            },
         },
     });
 
@@ -62,7 +74,9 @@ export function register(server: IServer): void {
         path: "/wallets/{id}/votes",
         handler: handlers.votes,
         options: {
-            validate: schemas.votes,
+            plugins: {
+                "hapi-ajv": schemas.votes,
+            },
         },
     });
 }

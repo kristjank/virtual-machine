@@ -1,5 +1,5 @@
 import * as Hapi from "hapi";
-import { IRequest, IServer } from "../interfaces";
+import { IRequest, IResponse, IServer } from "../interfaces";
 
 function fields(request: IRequest) {
     const pattern = /fields\[(.*?)\]/;
@@ -75,7 +75,7 @@ export const plugin = {
     async register(server: IServer): Promise<void> {
         server.ext({
             type: "onPreHandler",
-            async method(request: IRequest) {
+            async method(request: IRequest, h: IResponse) {
                 request.jsonapi = {
                     include: include(request),
                     sort: sort(request),
@@ -83,6 +83,8 @@ export const plugin = {
                     pagination: pagination(request),
                     fields: fields(request),
                 };
+
+                return h.continue;
             },
         });
     },

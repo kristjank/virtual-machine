@@ -1,7 +1,7 @@
 import { IRequest, IResponse } from "../../interfaces";
 
 export async function index(request: IRequest, h: IResponse) {
-    // @TODO
+    return { hello: "world" };
 }
 
 export async function top(request: IRequest, h: IResponse) {

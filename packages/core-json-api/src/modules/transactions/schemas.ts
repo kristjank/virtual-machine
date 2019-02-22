@@ -2,48 +2,47 @@ import { pagination } from "../shared/schemas";
 
 export const index: object = {
     query: {
-        ...pagination,
-        ...{
-            orderBy: {
-                type: "string",
-            },
-            id: {
-                type: "transactionId",
-            },
-            blockId: { type: "blockId" },
-            type: {
-                type: "integer",
-                minimum: 0,
-            },
-            version: {
-                type: "integer",
-            },
-            senderPublicKey: {
-                type: "publicKey",
-            },
-            senderId: {
-                type: "address",
-            },
-            recipientId: {
-                type: "address",
-            },
-            ownerId: {
-                type: "address",
-            },
-            timestamp: {
-                type: "integer",
-                minimum: 0,
-            },
-            amount: {
-                type: "integer",
-                minimum: 0,
-            },
-            fee: {
-                type: "integer",
-                minimum: 0,
-            },
-            vendorFieldHex: {
-                type: "hex",
+        type: "object",
+        properties: {
+            ...pagination,
+            ...{
+                orderBy: {
+                    type: "string",
+                },
+                id: {
+                    $ref: "transactionId",
+                },
+                blockId: { $ref: "blockId" },
+                type: {
+                    $ref: "transactionType",
+                },
+                version: {
+                    $ref: "transactionVersion",
+                },
+                senderPublicKey: {
+                    $ref: "publicKey",
+                },
+                senderId: {
+                    $ref: "address",
+                },
+                recipientId: {
+                    $ref: "address",
+                },
+                ownerId: {
+                    $ref: "address",
+                },
+                timestamp: {
+                    $ref: "timestamp",
+                },
+                amount: {
+                    $ref: "satoshi",
+                },
+                fee: {
+                    $ref: "satoshi",
+                },
+                vendorFieldHex: {
+                    $ref: "hex",
+                },
             },
         },
     },
@@ -51,22 +50,34 @@ export const index: object = {
 
 export const store: object = {
     payload: {
-        transactions: { type: "array" },
+        type: "object",
+        properties: {
+            transactions: { type: "array" },
+        },
     },
 };
 
 export const show: object = {
     params: {
-        id: { type: "transactionId" },
+        type: "object",
+        properties: {
+            id: { $ref: "transactionId" },
+        },
     },
 };
 
 export const unconfirmed: object = {
-    query: pagination,
+    query: {
+        type: "object",
+        properties: pagination,
+    },
 };
 
 export const showUnconfirmed: object = {
     params: {
-        id: { type: "transactionId" },
+        type: "object",
+        properties: {
+            id: { $ref: "transactionId" },
+        },
     },
 };

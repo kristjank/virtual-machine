@@ -1,6 +1,5 @@
-import { createSecureServer, createServer, mountServer } from "@arkecosystem/core-http-utils";
-import Hapi from "hapi";
-import { IRequest, IResponse, IServer } from "./interfaces";
+import { createServer, mountServer } from "@arkecosystem/core-http-utils";
+import { IServer } from "./interfaces";
 
 export class Server {
     private http: IServer;
@@ -12,29 +11,19 @@ export class Server {
         const options = {
             host: this.config.host,
             port: this.config.port,
-            routes: {
-                cors: {
-                    additionalHeaders: ["api-version"],
-                },
-                validate: {
-                    async failAction(request: IRequest, h: IResponse, err: Error) {
-                        throw err;
-                    },
-                },
-            },
         };
 
-        if (this.config.enabled) {
-            this.http = await createServer(options);
+        // if (this.config.enabled) {
+        this.http = await createServer(options);
 
-            this.mountServer("HTTP", this.http);
-        }
+        this.mountServer("HTTP", this.http);
+        // }
 
-        if (this.config.ssl.enabled) {
-            this.https = await createSecureServer(options, null, this.config.ssl);
+        // if (this.config.ssl.enabled) {
+        //     this.https = await createSecureServer(options, null, this.config.ssl);
 
-            this.mountServer("HTTPS", this.https);
-        }
+        //     this.mountServer("HTTPS", this.https);
+        // }
     }
 
     public async stop(): Promise<void> {
@@ -64,6 +53,22 @@ export class Server {
     }
 
     private async mountServer(name: string, server: IServer): Promise<void> {
+        // await server.register({
+        //     plugin: require("./plugins/enforce-content-type"),
+        // });
+
+        await server.register({
+            plugin: require("./plugins/parse-query-string"),
+        });
+
+        await server.register({
+            plugin: require("./plugins/ajv-validator"),
+        });
+
+        await server.register({
+            plugin: require("./modules"),
+        });
+
         await mountServer(`Public ${name.toUpperCase()} API`, server);
     }
 }

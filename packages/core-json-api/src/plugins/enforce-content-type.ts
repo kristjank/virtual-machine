@@ -1,14 +1,16 @@
 import { unsupportedMediaType } from "boom";
-import { IServer } from "../interfaces";
+import { IRequest, IResponse, IServer } from "../interfaces";
 
 export const plugin = {
     async register(server: IServer): Promise<void> {
         server.ext({
             type: "onPreHandler",
-            async method(request, h) {
+            async method(request: IRequest, h: IResponse) {
                 if (request.headers.accept.indexOf("application/vnd.api+json") === -1) {
                     throw unsupportedMediaType();
                 }
+
+                return h.continue;
             },
         });
     },

@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/delegates",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -17,7 +19,9 @@ export function register(server: IServer): void {
         path: "/delegates/{id}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 
@@ -26,7 +30,9 @@ export function register(server: IServer): void {
         path: "/delegates/{id}/blocks",
         handler: handlers.blocks,
         options: {
-            validate: schemas.blocks,
+            plugins: {
+                "hapi-ajv": schemas.blocks,
+            },
         },
     });
 
@@ -35,7 +41,9 @@ export function register(server: IServer): void {
         path: "/delegates/{id}/voters",
         handler: handlers.voters,
         options: {
-            validate: schemas.voters,
+            plugins: {
+                "hapi-ajv": schemas.voters,
+            },
         },
     });
 
@@ -44,7 +52,9 @@ export function register(server: IServer): void {
         path: "/delegates/{id}/voters/balances",
         handler: handlers.voterBalances,
         options: {
-            validate: schemas.voterBalances,
+            plugins: {
+                "hapi-ajv": schemas.voterBalances,
+            },
         },
     });
 }

@@ -8,7 +8,9 @@ export function register(server: IServer): void {
         path: "/transactions",
         handler: handlers.index,
         options: {
-            validate: schemas.index,
+            plugins: {
+                "hapi-ajv": schemas.index,
+            },
         },
     });
 
@@ -17,11 +19,8 @@ export function register(server: IServer): void {
         path: "/transactions",
         handler: handlers.store,
         options: {
-            validate: schemas.store,
             plugins: {
-                pagination: {
-                    enabled: false,
-                },
+                "hapi-ajv": schemas.store,
             },
         },
     });
@@ -31,7 +30,9 @@ export function register(server: IServer): void {
         path: "/transactions/{id}",
         handler: handlers.show,
         options: {
-            validate: schemas.show,
+            plugins: {
+                "hapi-ajv": schemas.show,
+            },
         },
     });
 
@@ -40,7 +41,9 @@ export function register(server: IServer): void {
         path: "/transactions/unconfirmed",
         handler: handlers.unconfirmed,
         options: {
-            validate: schemas.unconfirmed,
+            plugins: {
+                "hapi-ajv": schemas.unconfirmed,
+            },
         },
     });
 
@@ -49,7 +52,9 @@ export function register(server: IServer): void {
         path: "/transactions/unconfirmed/{id}",
         handler: handlers.showUnconfirmed,
         options: {
-            validate: schemas.showUnconfirmed,
+            plugins: {
+                "hapi-ajv": schemas.showUnconfirmed,
+            },
         },
     });
 

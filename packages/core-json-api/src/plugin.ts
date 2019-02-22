@@ -5,8 +5,8 @@ import { Server } from "./server";
 export const plugin: Container.PluginDescriptor = {
     pkg: require("../package.json"),
     defaults,
-    alias: "api",
-    async register(container: Container.IContainer, options) {
+    alias: "json:api",
+    async register(_, options) {
         const server = new Server(options);
         await server.start();
 
