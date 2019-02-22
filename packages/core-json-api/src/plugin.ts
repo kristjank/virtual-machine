@@ -13,6 +13,6 @@ export const plugin: Container.PluginDescriptor = {
         return server;
     },
     async deregister(container: Container.IContainer) {
-        return container.resolvePlugin<Server>("api").stop();
+        return container.resolvePlugin<Server>("json:api").stop();
     },
 };

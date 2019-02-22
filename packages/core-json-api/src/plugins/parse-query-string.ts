@@ -1,4 +1,3 @@
-import * as Hapi from "hapi";
 import { IRequest, IResponse, IServer } from "../interfaces";
 
 function fields(request: IRequest) {
@@ -43,7 +42,7 @@ function include(request: IRequest) {
     }));
 }
 
-function pagination(request: IRequest) {
+function page(request: IRequest): Record<string, number> {
     const allowed = ["number", "size", "offset", "limit", "cursor"];
     const pattern = /page\[(.*?)\]/;
 
@@ -80,7 +79,7 @@ export const plugin = {
                     include: include(request),
                     sort: sort(request),
                     filter: filter(request),
-                    pagination: pagination(request),
+                    page: page(request),
                     fields: fields(request),
                 };
 

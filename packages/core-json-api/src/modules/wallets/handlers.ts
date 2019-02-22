@@ -1,7 +1,7 @@
 import { IRequest, IResponse } from "../../interfaces";
 
 export async function index(request: IRequest, h: IResponse) {
-    return { hello: "world" };
+    return request.jsonapi;
 }
 
 export async function top(request: IRequest, h: IResponse) {

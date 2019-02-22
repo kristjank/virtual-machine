@@ -1,5 +1,5 @@
 import { createServer, mountServer } from "@arkecosystem/core-http-utils";
-import { IServer } from "./interfaces";
+import { IRequest, IResponse, IServer } from "./interfaces";
 
 export class Server {
     private http: IServer;
@@ -53,9 +53,9 @@ export class Server {
     }
 
     private async mountServer(name: string, server: IServer): Promise<void> {
-        await server.register({
-            plugin: require("./plugins/enforce-content-type"),
-        });
+        // await server.register({
+        //     plugin: require("./plugins/enforce-media-type"),
+        // });
 
         await server.register({
             plugin: require("./plugins/parse-query-string"),
