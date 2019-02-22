@@ -1,7 +1,7 @@
 import AJV from "ajv";
-import { badData } from "boom";
 import Hapi from "hapi";
 import { isValid } from "ipaddr.js";
+import { IValidationError } from "../interfaces";
 
 export const schemas = {
     hex: {
@@ -145,18 +145,28 @@ export const plugin = {
                             return h
                                 .response({
                                     errors: ajv.errors.map(error => {
-                                        const source: Record<string, string> = { pointer: error.schemaPath };
-
-                                        if (error.dataPath) {
-                                            source.parameter = error.dataPath;
-                                        }
-
-                                        return {
+                                        const report: IValidationError = {
                                             status: 422,
-                                            source,
+                                            source: { pointer: error.schemaPath },
                                             title: error.keyword,
                                             detail: error.message,
                                         };
+
+                                        if (error.dataPath) {
+                                            // @ts-ignore
+                                            report.source.parameter = error.dataPath;
+                                        }
+
+                                        // @ts-ignore
+                                        if (error.params.additionalProperty) {
+                                            report.title = "Invalid Query Parameter";
+                                            // @ts-ignore
+                                            report.detail = `The endpoint does not have a '${
+                                                error.params.additionalProperty
+                                            }' query parameter.`;
+                                        }
+
+                                        return report;
                                     }),
                                 })
                                 .takeover();

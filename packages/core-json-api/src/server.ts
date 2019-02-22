@@ -1,5 +1,5 @@
 import { createServer, mountServer } from "@arkecosystem/core-http-utils";
-import { IRequest, IResponse, IServer } from "./interfaces";
+import { IServer } from "./interfaces";
 
 export class Server {
     private http: IServer;
@@ -63,6 +63,14 @@ export class Server {
 
         await server.register({
             plugin: require("./plugins/ajv-validator"),
+        });
+
+        await server.register({
+            plugin: require("./plugins/transform-error"),
+        });
+
+        await server.register({
+            plugin: require("./plugins/transform-response"),
         });
 
         await server.register({
