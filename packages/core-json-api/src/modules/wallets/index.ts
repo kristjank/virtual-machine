@@ -10,6 +10,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.index,
+                serializer: "article",
             },
         },
     });

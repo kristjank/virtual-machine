@@ -43,6 +43,6 @@ export const plugin = {
             },
         });
     },
-    name: "enforce-content-type",
+    name: "media-type-enforcer",
     version: "1.0.0",
 };

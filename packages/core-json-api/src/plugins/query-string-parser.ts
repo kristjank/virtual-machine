@@ -87,6 +87,6 @@ export const plugin = {
             },
         });
     },
-    name: "parse-query-string",
+    name: "query-string-parser",
     version: "1.0.0",
 };

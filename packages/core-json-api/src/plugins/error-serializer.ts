@@ -50,6 +50,6 @@ export const plugin = {
             },
         });
     },
-    name: "transform-error",
+    name: "error-serializer",
     version: "1.0.0",
 };

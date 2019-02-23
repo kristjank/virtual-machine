@@ -8,6 +8,8 @@ import * as Transactions from "./transactions";
 import * as Votes from "./votes";
 import * as Wallets from "./wallets";
 
+import "./types";
+
 export const plugin = {
     async register(server: IServer): Promise<void> {
         [Blockchain, Blocks, Delegates, Node, Peers, Transactions, Votes, Wallets].forEach(module =>

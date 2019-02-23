@@ -54,23 +54,23 @@ export class Server {
 
     private async mountServer(name: string, server: IServer): Promise<void> {
         // await server.register({
-        //     plugin: require("./plugins/enforce-media-type"),
+        //     plugin: require("./plugins/media-type-enforcer"),
         // });
 
         await server.register({
-            plugin: require("./plugins/parse-query-string"),
+            plugin: require("./plugins/query-string-parser"),
         });
 
         await server.register({
-            plugin: require("./plugins/ajv-validator"),
+            plugin: require("./plugins/validator"),
         });
 
         await server.register({
-            plugin: require("./plugins/transform-error"),
+            plugin: require("./plugins/error-serializer"),
         });
 
         await server.register({
-            plugin: require("./plugins/transform-response"),
+            plugin: require("./plugins/response-serializer"),
         });
 
         await server.register({
