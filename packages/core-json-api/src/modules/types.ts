@@ -1,73 +1,159 @@
 import { serializer } from "../serializer";
 
+export enum SerialiserType {
+    Block = "block",
+    Round = "round",
+    Transaction = "transaction",
+    Wallet = "wallet",
+}
+
 // Register 'article' type
-serializer.register("article", {
-    id: "id", // The attributes to use as the reference. Default = 'id'.
-    blacklist: ["updated"], // An array of blacklisted attributes. Default = []
+serializer.register("wallet", {
+    id: "id",
     links: {
-        // An object or a function that describes links.
         self(data) {
-            // Can be a function or a string value ex: { self: '/articles/1'}
-            return "/articles/" + data.id;
+            return "/wallets/" + data.id;
         },
     },
     relationships: {
-        // An object defining some relationships.
-        author: {
-            type: "people", // The type of the resource
+        blocks: {
+            type: "block",
+        },
+        rounds: {
+            type: "round",
+        },
+        transactions: {
+            type: "transaction",
             links(data) {
-                // An object or a function that describes Relationships links
                 return {
-                    self: "/articles/" + data.id + "/relationships/author",
-                    related: "/articles/" + data.id + "/author",
+                    self: "/wallets/" + data.id + "/relationships/transactions",
+                    related: "/wallets/" + data.id + "/transactions",
                 };
             },
         },
-        tags: {
-            type: "tag",
-        },
-        photos: {
-            type: "photo",
-        },
-        comments: {
-            type: "comment",
-            schema: "only-body", // A custom schema
-        },
     },
     topLevelMeta(data, extraData) {
-        // An object or a function that describes top level meta.
         return {
+            requestId: extraData.id,
             count: extraData.count,
             total: data.length,
         };
     },
     topLevelLinks: {
-        // An object or a function that describes top level links.
-        self: "/articles", // Can be a function (with extra data argument) or a string value
+        self: "/wallets",
     },
 });
 
-// Register 'people' type
-serializer.register("people", {
+serializer.register("block", {
     id: "id",
     links: {
         self(data) {
-            return "/peoples/" + data.id;
+            return "/blocks/" + data.id;
         },
+    },
+    relationships: {
+        generator: {
+            type: "wallet",
+        },
+        transactions: {
+            type: "transaction",
+            links(data) {
+                return {
+                    self: "/blocks/" + data.id + "/relationships/transactions",
+                    related: "/blocks/" + data.id + "/transactions",
+                };
+            },
+        },
+    },
+    topLevelMeta(data, extraData) {
+        return {
+            requestId: extraData.id,
+            count: extraData.count,
+            total: data.length,
+        };
+    },
+    topLevelLinks: {
+        self: "/blocks",
     },
 });
 
-// Register 'tag' type
-serializer.register("tag", {
+serializer.register("round", {
     id: "id",
+    links: {
+        self(data) {
+            return "/rounds/" + data.id;
+        },
+    },
+    relationships: {
+        forgers: {
+            type: "wallet",
+        },
+        blocks: {
+            type: "block",
+            links(data) {
+                return {
+                    self: "/rounds/" + data.id + "/relationships/blocks",
+                    related: "/rounds/" + data.id + "/blocks",
+                };
+            },
+        },
+    },
+    topLevelMeta(data, extraData) {
+        return {
+            requestId: extraData.id,
+            count: extraData.count,
+            total: data.length,
+        };
+    },
+    topLevelLinks: {
+        self: "/rounds",
+    },
 });
 
-// Register 'photo' type
-serializer.register("photo", {
+serializer.register("transaction", {
     id: "id",
-});
-
-// Register 'comment' type with a custom schema
-serializer.register("comment", "only-body", {
-    id: "_id",
+    links: {
+        self(data) {
+            return "/transactions/" + data.id;
+        },
+    },
+    relationships: {
+        block: {
+            type: "block",
+            links(data) {
+                return {
+                    self: "/transactions/" + data.id + "/relationships/block",
+                    related: "/transactions/" + data.id + "/block",
+                };
+            },
+        },
+        sender: {
+            type: "wallet",
+            links(data) {
+                return {
+                    self: "/transactions/" + data.id + "/relationships/sender",
+                    related: "/transactions/" + data.id + "/sender",
+                };
+            },
+        },
+        recipient: {
+            type: "wallet",
+            links(data) {
+                return {
+                    self: "/transactions/" + data.id + "/relationships/recipient",
+                    related: "/transactions/" + data.id + "/recipient",
+                };
+            },
+        },
+    },
+    topLevelMeta(data, extraData) {
+        return {
+            requestId: extraData.id,
+            count: extraData.count,
+            total: data.length,
+        };
+    },
+    topLevelLinks: {
+        self: "/transactions",
+    },
 });

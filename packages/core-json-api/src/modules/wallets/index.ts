@@ -1,4 +1,5 @@
 import { IServer } from "../../interfaces";
+import { SerialiserType } from "../types";
 import * as handlers from "./handlers";
 import * as schemas from "./schemas";
 
@@ -10,7 +11,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.index,
-                serializer: "article",
+                serializer: SerialiserType.Wallet,
             },
         },
     });
@@ -22,6 +23,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.index,
+                serializer: SerialiserType.Wallet,
             },
         },
     });
@@ -44,6 +46,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.transactions,
+                serializer: SerialiserType.Transaction,
             },
         },
     });
@@ -55,6 +58,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.transactionsSent,
+                serializer: SerialiserType.Transaction,
             },
         },
     });
@@ -66,6 +70,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.transactionsReceived,
+                serializer: SerialiserType.Transaction,
             },
         },
     });
@@ -77,6 +82,7 @@ export function register(server: IServer): void {
         options: {
             plugins: {
                 validator: schemas.votes,
+                serializer: SerialiserType.Transaction,
             },
         },
     });
