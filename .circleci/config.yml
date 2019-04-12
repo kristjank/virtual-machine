@@ -56,6 +56,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -134,6 +135,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -220,6 +222,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -306,6 +309,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -392,6 +396,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -478,6 +483,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -564,6 +570,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -675,6 +682,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -780,6 +788,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
@@ -891,6 +900,7 @@ jobs:
             - ./packages/core-transaction-pool/node_modules
             - ./packages/core-transactions/node_modules
             - ./packages/core-utils/node_modules
+            - ./packages/core-vm/node_modules
             - ./packages/core-vote-report/node_modules
             - ./packages/core-webhooks/node_modules
             - ./packages/crypto/node_modules
