@@ -27,7 +27,10 @@
         "test:watch:all": "cross-env CORE_ENV=test jest --runInBand --watchAll",
         "updates": "../../node_modules/npm-check-updates/bin/npm-check-updates -a"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@arkecosystem/core-container": "^2.3.0-next.6",
+        "@arkecosystem/core-interfaces": "^2.3.0-next.6"
+    },
     "devDependencies": {
         "@sindresorhus/tsconfig": "^0.1.1",
         "@types/jest": "^23.3.10",

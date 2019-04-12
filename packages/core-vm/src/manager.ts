@@ -1,23 +1,18 @@
-"use strict";
 import { app } from "@arkecosystem/core-container";
-// import { Logger } from "@arkecosystem/core-interfaces";
-import * as ivm from "isolated-vm";
+import { Logger } from "@arkecosystem/core-interfaces";
+import { Isolate, IsolateOptions } from "isolated-vm";
 
 export class VirtualMachineManager {
-    // private logger = app.resolvePlugin<Logger.ILogger>("logger");
-
-    private isolate = new ivm.Isolate();
+    private logger = app.resolvePlugin<Logger.ILogger>("logger");
 
     public constructor() {
-        // this.logger.info("Starting core virtual machine" );
-        console.log("druzinla");
+        this.logger.info("Starting CORE VIRTUAL MACHINE Engine");
     }
 
     public runIvm() {
+        const isolate = new Isolate();
         console.log("mamqqa");
-        // initialize
-        // let isolate = new ivm.Isolate(memoryLimit: 16});
-        const context = this.isolate.createContextSync();
-        // let globalReference = context.globalReference();
+        const context = isolate.createContextSync();
+        const globalReference = context.globalReference();
     }
 }
