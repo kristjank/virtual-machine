@@ -16,29 +16,33 @@ export class VirtualMachineManager {
     public runIvm() {
         const isolate = new ivm.Isolate({ memoryLimit: 32 });
 
+        const contract = `import contract from "./contract.js"`;
+        const code = isolate.compileModuleSync(contract);
+
+        console.log(code);
+
         const context = isolate.createContextSync();
         const global = context.global;
         global.setSync("ivm", ivm);
-        isolate
-            .compileScriptSync(
-                `
-function makeReference(ref) {
-return new ivm.Reference(ref);
-}
-function isReference(ref) {
-return ref instanceof ivm.Reference;
-}
-`,
-            )
-            .runSync(context);
+        const script2 = isolate.compileScriptSync(`
+                function returnWallet() {
+                    data.setAge(128);
+                    return data.balance;
+                }
+                `);
 
         console.log(context.global);
 
         const globalReference = context.globalReference();
-        const wallets = this.walletManager.allByAddress();
-        const data = new ivm.ExternalCopy({ wallets });
+        const wallet = this.walletManager.findByAddress("APnhwwyTbMiykJwYbGhYjNgtHiVJDSEhSn");
+        const data = new ivm.ExternalCopy({ wallet });
         data.copy({ transferIn: true });
+
+        console.log("DATA:");
         console.log(data);
+        script2.runSync(context);
+        const obj = data.copyInto();
+        console.log(obj);
 
         //    globalReference.setSync('_log', new Reference(function(...args: any) {
         //             console.log(`Actor : `, ...args);
