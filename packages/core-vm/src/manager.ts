@@ -1,8 +1,8 @@
 import { app } from "@arkecosystem/core-container";
 import { Logger } from "@arkecosystem/core-interfaces";
-// import { Isolate, IsolateOptions, Reference, ExternalCopy } from "isolated-vm";
-// import { Isolate, IsolateOptions, Reference, ExternalCopy } from "isolated-vm";
+import * as fs from "fs";
 import ivm from "isolated-vm";
+import * as path from "path";
 
 export class VirtualMachineManager {
     private logger = app.resolvePlugin<Logger.ILogger>("logger");
@@ -10,61 +10,74 @@ export class VirtualMachineManager {
 
     public constructor() {
         this.logger.info("Starting Core Virtual Machine Engine");
-        console.log(this.walletManager.findByAddress("APnhwwyTbMiykJwYbGhYjNgtHiVJDSEhSn"));
+        // console.log(this.walletManager.findByAddress("APnhwwyTbMiykJwYbGhYjNgtHiVJDSEhSn"));
     }
 
     public runIvm() {
         const isolate = new ivm.Isolate({ memoryLimit: 32 });
-
-        const contract = `import contract from "./contract.js"`;
-        const code = isolate.compileModuleSync(contract);
-
-        console.log(code);
-
         const context = isolate.createContextSync();
         const global = context.global;
-        global.setSync("ivm", ivm);
-        const script2 = isolate.compileScriptSync(`
-                function returnWallet() {
-                    data.setAge(128);
-                    return data.balance;
-                }
-                `);
-
-        console.log(context.global);
-
         const globalReference = context.globalReference();
         const wallet = this.walletManager.findByAddress("APnhwwyTbMiykJwYbGhYjNgtHiVJDSEhSn");
+        const wallets = this.walletManager.allByAddress();
         const data = new ivm.ExternalCopy({ wallet });
         data.copy({ transferIn: true });
 
-        console.log("DATA:");
-        console.log(data);
-        script2.runSync(context);
-        const obj = data.copyInto();
-        console.log(obj);
+        globalReference.setSync(
+            "_test",
+            new ivm.Reference((...args) => {
+                console.log(`Test : `, ...args);
+                console.log(`Wallets: `, wallets.length);
+            }),
+        );
 
-        //    globalReference.setSync('_log', new Reference(function(...args: any) {
-        //             console.log(`Actor : `, ...args);
-        //         }));
+        globalReference.setSync("_ivm", ivm);
+        globalReference.setSync("global", globalReference.derefInto());
+        // globalReference.setSync('_wallet', data);
 
-        //         globalReference.setSync('global', globalReference.derefInto());
+        globalReference.setSync(
+            "_getWallets",
+            new ivm.Reference(() => {
+                // const allWallets = wallets;
+                // allWallets.shift();
+                return new ivm.ExternalCopy(wallets.shift().copyInto());
+            }),
+        );
 
-        //         const bootstrap = isolate.compileScriptSync(`
-        // new function() {
-        // const log = _log;
+        const bootstrap = isolate.compileScriptSync(`
+        new function() {
+            const ivm = _ivm;
+            const test = _test;
+            const getWallets = _getWallets;
+            delete _ivm;
+            delete _test;
+            delete _getWallets;
 
-        // global.log = function(...args) {
-        // log.applySync(undefined, args.map(arg => new ivm.ExternalCopy(arg).copyInto()));
-        // }
-        // global.changeSpeed = function(x, y) {
-        // changeSpeed.applySync(undefined, [x, y]);
-        // }
-        // global.getNearbyActors = function() {
-        // return getNearbyActors.applySync(undefined, []);
-        // }
-        // }
-        // `);
-        //         bootstrap.runSync(context);
+            global.test = function(...args) {
+                test.applySync(undefined, args.map(arg => new ivm.ExternalCopy(arg).copyInto()));
+            }
+            global.getWallets = function() {
+                return getWallets.applySync(undefined, []);
+            }
+
+
+        }
+        `);
+        bootstrap.runSync(context);
+
+        const runDApp = isolate.compileScriptSync(
+            fs.readFileSync(path.join(__dirname, "..", "src", "contract.js")).toString("utf-8"),
+        );
+
+        runDApp.runSync(context);
+
+        const runMainScript = isolate.compileScriptSync("main();");
+        runMainScript.runSync(context);
+        console.log(isolate.cpuTime);
+        runMainScript.runSync(context);
+        console.log(isolate.cpuTime);
+        runMainScript.runSync(context);
+        console.log(isolate.cpuTime);
+        runMainScript.runSync(context);
     }
 }
