@@ -10,6 +10,7 @@ export const plugin: Container.PluginDescriptor = {
         /* Start plugin here */
         const vm = new VirtualMachineManager();
         vm.runIvm();
+        vm.runIvmModuleTest();
         return vm;
     },
 

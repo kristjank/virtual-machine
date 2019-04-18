@@ -3,6 +3,7 @@ import { Logger } from "@arkecosystem/core-interfaces";
 import * as fs from "fs";
 import ivm from "isolated-vm";
 import * as path from "path";
+import { Module } from "webpack";
 
 export class VirtualMachineManager {
     private logger = app.resolvePlugin<Logger.ILogger>("logger");
@@ -40,7 +41,7 @@ export class VirtualMachineManager {
             new ivm.Reference(() => {
                 // const allWallets = wallets;
                 // allWallets.shift();
-                return new ivm.ExternalCopy(wallets.shift().copyInto());
+                return new ivm.ExternalCopy(wallets.shift());
             }),
         );
 
@@ -65,19 +66,56 @@ export class VirtualMachineManager {
         `);
         bootstrap.runSync(context);
 
-        const runDApp = isolate.compileScriptSync(
+        const runDappSimple = isolate.compileScriptSync(
             fs.readFileSync(path.join(__dirname, "..", "src", "contract.js")).toString("utf-8"),
         );
-
-        runDApp.runSync(context);
+        runDappSimple.runSync(context);
 
         const runMainScript = isolate.compileScriptSync("main();");
         runMainScript.runSync(context);
-        console.log(isolate.cpuTime);
+        this.logger.debug(`CpuTime (ms, ns): (${isolate.cpuTime})`);
+
         runMainScript.runSync(context);
-        console.log(isolate.cpuTime);
+        this.logger.debug(`CpuTime (ms, ns): (${isolate.cpuTime})`);
+
         runMainScript.runSync(context);
-        console.log(isolate.cpuTime);
-        runMainScript.runSync(context);
+        this.logger.debug(`CpuTime (ms, ns): (${isolate.cpuTime})`);
+    }
+
+    public instatiateCallback(specifier: string, referrer: Module) {
+        console.log(specifier);
+        console.log(referrer);
+
+        return fs;
+    }
+
+    public runIvmModuleTest() {
+        this.logger.info("Starting module integration test");
+        const isolate = new ivm.Isolate({ memoryLimit: 32 });
+        const context = isolate.createContextSync();
+
+        const module = isolate.compileModuleSync(
+            fs.readFileSync(path.join(__dirname, "..", "src", "contract-module.js")).toString("utf-8"),
+        );
+        console.log(module);
+
+        const dependencySpecifiers = module.dependencySpecifiers; // use this to check for allowed ones
+        console.log(dependencySpecifiers);
+
+        console.log("befor institi");
+        module.instantiateSync(context, (specifier: string, referrer: ivm.Module) => {
+            console.log(specifier);
+            console.log(referrer);
+            console.log("callback");
+            return null;
+        });
+
+        const reference = module.namespace;
+
+        const defExport = reference.getSync("add");
+        console.log(defExport);
+
+        // const result = defExport.applySync(null, [2,4]);
+        // console.log(result);
     }
 }
