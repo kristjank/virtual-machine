@@ -1,7 +1,6 @@
 import "jest-extended";
 
-import { bignumify } from "@arkecosystem/core-utils";
-import { configManager, PublicKey } from "@arkecosystem/crypto";
+import { Identities, Managers, Utils } from "@arkecosystem/crypto";
 import delay from "delay";
 import { RestClient } from "../../../helpers";
 import { secrets } from "../../../utils/config/testnet/delegates.json";
@@ -11,10 +10,13 @@ jest.setTimeout(1200000);
 
 let app;
 export async function setUp() {
+    process.env.CORE_SKIP_COLD_START = "true";
+
     app = await setUpContainer({
         include: [
             "@arkecosystem/core-event-emitter",
             "@arkecosystem/core-logger-pino",
+            "@arkecosystem/core-state",
             "@arkecosystem/core-database-postgres",
             "@arkecosystem/core-transaction-pool",
             "@arkecosystem/core-p2p",
@@ -30,8 +32,8 @@ export async function setUp() {
     await databaseService.saveRound(
         secrets.map(secret => ({
             round: 1,
-            publicKey: PublicKey.fromPassphrase(secret),
-            voteBalance: bignumify("245098000000000"),
+            publicKey: Identities.PublicKey.fromPassphrase(secret),
+            voteBalance: Utils.BigNumber.make("245098000000000"),
         })),
     );
 }
@@ -41,7 +43,7 @@ export async function tearDown() {
 }
 
 export async function snoozeForBlock(sleep: number = 0, height: number = 1) {
-    const blockTime = configManager.getMilestone(height).blocktime * 1000;
+    const blockTime = Managers.configManager.getMilestone(height).blocktime * 1000;
     const sleepTime = sleep * 1000;
 
     return delay(blockTime + sleepTime);

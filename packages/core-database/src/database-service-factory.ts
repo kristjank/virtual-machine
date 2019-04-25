@@ -1,4 +1,5 @@
-import { Database } from "@arkecosystem/core-interfaces";
+import { app } from "@arkecosystem/core-container";
+import { Database, State } from "@arkecosystem/core-interfaces";
 import { DatabaseService } from "./database-service";
 import { BlocksBusinessRepository } from "./repositories/blocks-business-repository";
 import { DelegatesBusinessRepository } from "./repositories/delegates-business-repository";
@@ -11,8 +12,7 @@ export const databaseServiceFactory = async (
     walletManager: Database.IWalletManager,
     connection: Database.IConnection,
 ): Promise<Database.IDatabaseService> => {
-    let databaseService: DatabaseService;
-    databaseService = new DatabaseService(
+    const databaseService: Database.IDatabaseService = new DatabaseService(
         opts,
         connection,
         walletManager,
@@ -21,6 +21,10 @@ export const databaseServiceFactory = async (
         new TransactionsBusinessRepository(() => databaseService),
         new BlocksBusinessRepository(() => databaseService),
     );
+
     await databaseService.init();
+
+    app.resolvePlugin<State.IStateStorage>("state").setLastBlock(await databaseService.getLastBlock());
+
     return databaseService;
 };
